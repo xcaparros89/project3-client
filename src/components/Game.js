@@ -320,12 +320,12 @@ const Game = (props) => {
         <div className="row r11 no-gutters">
             <div className="col-12" style={{marginTop:'16px'}}><img className="tile-bg" src={require("../img/select-robot-header.png")} alt="" /></div>
             <div className="col-12 select-robot-body d-flex justify-content-center" style={{flexDirection:'column', alignItems:'center'}}>
-              <div className="row d-flex justify-content-center text-center" style={{width:'90%'}}>
+              <div className="row d-flex justify-content-center text-center" style={{width:'80%'}}>
               {robotChoice.map(robot=>{
-              return(<div className="col-4"><p onClick={()=>setRobotChosen(robot)}>{robot}</p> <br/> <br/> </div>  )
+              return(<div className="col-4"><img className="bg-90" src={require("../img/gui/robot-select-active-qam.png")} alt="" />{/*<p onClick={()=>setRobotChosen(robot)}>{robot}</p> <br/> <br/> */}</div>  )
             })}
               </div>
-              <div className="row d-flex justify-content-center text-center" style={{width:'90%'}}>
+              <div className="row d-flex justify-content-center text-center" style={{width:'90%', marginTop:'3%', marginBottom:'2%'}}>
               {
                 (ready) ? <img onClick={changeReady} className="robot-selection-btn" src={require("../img/btn/btn-ready-ready.png")} style={{maxWidth:'130px', maxHeight:'60px', border:'1px solid #ffd21f', display:'inline'}} alt="Ready" /> :
                 <img onClick={changeReady} className="robot-selection-btn" src={require("../img/btn/btn-ready-notready.png")} style={{maxWidth:'130px', maxHeight:'60px', display:'inline'}} alt="Not Ready" />

@@ -151,12 +151,16 @@ h1 {
     max-height: 85%; 
 }
 
+.bg-90 {
+    max-width: 90%;
+    max-height: 90%;  
+}
+
 .select-robot-body {
     background: url(../img/select-robot-body-bg.png);
     background-size: 100%;
     background-repeat: repeat-y;
-    padding-top:8%;
-    padding-bottom:8%
+    padding-top:4%;
 }
 
 .deck-bg {
