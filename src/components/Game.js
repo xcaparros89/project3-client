@@ -88,13 +88,17 @@ const Game = (props) => {
           socket.on('disableRobot',({robot})=>{
             console.log(robot, 'disabled')
             setRobotsTaken(prev=>[...prev, robot])
+            console.log(robotsTaken, 'robtsTaken')
             if(robotChosen === robot){setRobotChosen('')}
           })
 
           socket.on('enableRobot',({robot})=>{
             console.log(robot, 'enabled')
-            let newRobotChosen = robotChosen.filter(name=>name!==robot)
-            setRobotsTaken(newRobotChosen)
+            console.log(robotsTaken, 'robotsTAkeninenambe');
+            setRobotsTaken(prev=>{
+              let newRobotsTaken = prev.filter(name=>name!==robot);
+              return newRobotsTaken
+            })
           })
           
 
@@ -312,6 +316,7 @@ const Game = (props) => {
   }
   return (
   <div className="container container-body">
+  {console.log(robotsTaken, 'robotstakenAgain')}
       {/* END CHAT */}
       {console.log(room.users, players, 'room.users, players')}
       <div className="float-left chat-container">
