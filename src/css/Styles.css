@@ -1,3 +1,13 @@
+@font-face {
+    font-family: 'Transformers Movie';
+    src: url('../fonts/TransformersMovie.eot');
+    src: url('../fonts/TransformersMovie.eot?#iefix') format('embedded-opentype'),
+        url('../fonts/TransformersMovie.woff2') format('woff2'),
+        url('../fonts/TransformersMovie.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
 @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
 body {
     background-color: #626e7c;
@@ -91,7 +101,6 @@ h1.countdown {
     position: absolute;
     top:17%;
     left:2%;
-    visibility: hidden;
 }
 
 h1.countdown.red {

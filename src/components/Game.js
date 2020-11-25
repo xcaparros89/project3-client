@@ -20,25 +20,12 @@ const Game = (props) => {
     const [start, setStart] = useState(false);
     const robots = ['x', 'y', 'z', 'a', 's', 'd', 'f', 'j']
     const [players, setPlayers] = useState([]);
-    const [board, setBoard] = useState( [
-      ['o','o','o','o','o','o','o','o','o','o','o','o'],
-      ['pit',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','pit'],
-      ['pit',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','pit'],
-      ['pit',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','pit'],
-      ['pit',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','pit'],
-      ['pit',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','pit'],
-      ['pit',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','pit'],
-      ['pit',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','pit'],
-      ['pit',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','pit'],
-      ['pit',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','pit'],
-      ['pit',' ',' ',' ',' ',' ',' ',' ',' ',' ',' ','pit'],
-      ['pit','pit','pit','pit','pit','pit','pit','pit','pit','pit','pit','pit'],
-    ]);
-    const [yourActions, setYourActions] = useState({actions:[['nothing',0],['nothing',0],['nothing',0],['nothing',0],['nothing',0]], handCards:[], cardPicked:''})
+    const [board, setBoard] = useState([]);
+    const [yourActions, setYourActions] = useState({actions:[['disabled',0],['disabled',0],['disabled',0],['disabled',0],['disabled',0]], handCards:[['disabled',0],['disabled',0],['disabled',0],['disabled',0],['disabled',0],['disabled',0],['disabled',0],['disabled',0]], cardPicked:''})
     const [robotChosen, setRobotChosen] = useState('')
     const [id, setId] = useState('');
     const [disabled, setDisabled] = useState([])
-    const [counter, setCounter] = useState(10);
+    const [counter, setCounter] = useState(0);
 
     useEffect(() => {
         if(props.history.location.state){ setCreator(props.history.location.state.creator)};
@@ -90,6 +77,7 @@ const Game = (props) => {
         
           socket.on('finishGame',({winner, newBoard, newPlayers})=>{
             console.log('the winner is: ', winner)
+            alert('the winner is: ', winner)
           })
 
           socket.on('doActions',({newIPlayer, newIAction, newBoard, newPlayers, isTwo, creator})=>{
@@ -97,7 +85,6 @@ const Game = (props) => {
           })
 
           document.body.classList.remove('home');
-
         return () => {
             socket.close();
         }
@@ -107,7 +94,7 @@ const Game = (props) => {
 
     let handleActions = (iPlayer, iAction, newPlayers, newBoard, isTwo) =>{
       let newHandle
-      const [action, number] = newPlayers[iPlayer].actions[iAction][0]!=='repeat'? newPlayers[iPlayer].actions[iAction] : iAction === 0 || newPlayers[iPlayer].actions[iAction-1][0] ==='repeat' ? ['nothing', 0] : newPlayers[iPlayer].actions[iAction-1];
+      const [action, number] = newPlayers[iPlayer].actions[iAction][0]!=='repeat'? newPlayers[iPlayer].actions[iAction] : iAction === 0 || newPlayers[iPlayer].actions[iAction-1][0] ==='repeat' ? ['disabled', 0] : newPlayers[iPlayer].actions[iAction-1];
 
       if(action === 'move'){
         newHandle = handleMove(number, iPlayer, newPlayers, newBoard)
@@ -276,6 +263,13 @@ const Game = (props) => {
       setYourActions(newYou)
     }
   
+    let buttonName = (arr) => {
+      if(arr[0] ==='disabled'){
+        return arr[0];
+      }else {
+        return arr.join('_')
+      }
+    }
 
   return (
   <div className="container container-body">
@@ -402,13 +396,23 @@ const Game = (props) => {
                     return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/tile-lockers-3.png")} alt="" /></div>)
                   } else if(iRow === 1){
                     return(<div key={iCol} className={`col-1 c${iCol} tile`}> <img className="tile-bg" src={require("../img/tiles/right-border-box.png")} alt="" /></div>)
-                  } else{
+                  }else if(iRow === 11 ){
+                  return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/right-border-regular-no-shadow.png")} alt="" /></div>)
+                } else{
                     return(<div key={iCol} className={`col-1 c${iCol} tile`}> <img className="tile-bg" src={require("../img/tiles/right-border-regular-shadow.png")} alt="" /></div>)
                   }
                 } else if(iRow === 0 && iCol === 1){
                       return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/tile-boxes-2.png")} alt="" /></div>)
                 } else if(iRow === 0 && iCol === 10){
                       return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/tile-lockers-6.png")} alt="" /></div>)
+                } else if(iRow === 11 && iCol ===0){
+                      return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/left-border-regular-left-shadow.png")} alt="" /></div>)
+                } else if(iRow === 11 && iCol <9){
+                      return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/TileSep-57.png")} alt="" /></div>)
+                } else if(iRow === 11 && iCol === 9 ){
+                  return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/TileSep-60.png")} alt="" /></div>)
+                } else if(iRow === 11 && iCol === 10 ){
+                  return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/TileSep-59.png")} alt="" /></div>)
                 }
           
                   else {
@@ -440,8 +444,10 @@ const Game = (props) => {
                   <div id="draggableheader" className="row no-gutters"></div>
                   <div id="" className="row no-gutters" style={{marginBottom: '4%'}}>
                       <div className="col-8 d-flex align-items-center"><img className="robot-controller-title" src={require("../img/gui/robot-controller/robot-controller-title.png")} alt="" /></div>
-                      <div className="col-2 d-flex align-items-center" style={{paddingLeft:'4%', paddingRight:'1%'}}><img className="clock" src={require("../img/gui/robot-controller/clock_active.png")} alt="" /></div>
-                      <div className="col-2"><img className="tile-bg" src={require("../img/gui/robot-controller/countdown_disabled_screen.png")} alt="" /><h1 class="countdown">30"</h1></div>
+                      <div className="col-2 d-flex align-items-center" style={{paddingLeft:'4%', paddingRight:'1%'}}>
+                        {disabled.includes('endTurn')? <img  onClick={()=>endTurn()} className="clock" src={require("../img/gui/robot-controller/clock_disabled.png")} alt="" /> : <img  onClick={()=>endTurn()} className="clock" src={require("../img/gui/robot-controller/clock_active.png")} alt="" />}
+                      </div>
+                      <div className="col-2"><img className="tile-bg" src={require("../img/gui/robot-controller/countdown_disabled_screen.png")} alt="" /><h1 class="countdown">{counter>0&&counter+'"'}</h1></div>
                   </div>
                   <div className="row no-gutters" style={{marginBottom: '4%'}}>
                       <div className="col-4">
@@ -449,23 +455,23 @@ const Game = (props) => {
                       </div>
                       <div className="col-8">
                           <div className="row cards-to-play no-gutters">
-                              <div className="col"><img className="tile-bg d-block mx-auto" src={require("../img/gui/robot-controller/turn_1_screen.png")} alt="" /></div>
-                              <div className="col"><img className="tile-bg d-block mx-auto" src="./img/gui/robot-controller/move_2_screen.png" alt="" /></div>
-                              <div className="col"><img className="tile-bg d-block mx-auto" src="./img/gui//robot-controller/turn_-1_screen.png" alt="" /></div>
-                              <div className="col"><img className="tile-bg d-block mx-auto" src="./img/gui/robot-controller/move_-1_screen.png" alt="" /></div>
-                              <div className="col"><img className="tile-bg d-block mx-auto" src="./img/gui/robot-controller/repeat_x_screen.png" alt="" /></div>
+                              <div className="col"><img className="tile-bg d-block mx-auto" onClick={()=>clickCard('actions', 0)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[0])}_screen.png`)} alt="" /></div>
+                              <div className="col"><img className="tile-bg d-block mx-auto" onClick={()=>clickCard('actions', 1)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[1])}_screen.png`)} alt="" /></div>
+                              <div className="col"><img className="tile-bg d-block mx-auto" onClick={()=>clickCard('actions', 2)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[2])}_screen.png`)} alt="" /></div>
+                              <div className="col"><img className="tile-bg d-block mx-auto" onClick={()=>clickCard('actions', 3)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[3])}_screen.png`)} alt="" /></div>
+                              <div className="col"><img className="tile-bg d-block mx-auto" onClick={()=>clickCard('actions', 4)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[4])}_screen.png`)} alt="" /></div>
                           </div>
                       </div>
                   </div>
                   <div class="row  no-gutters">
-                      <div className="col"><img class="tile-bg" src="./img/gui/robot-controller/move_1.png" alt="" /></div>
-                      <div className="col"><img class="tile-bg" src="./img/gui/robot-controller/move_2_disabled.png" alt="" /></div>
-                      <div className="col"><img class="tile-bg" src="./img/gui/robot-controller/turn_1_disabled.png" alt="" /></div>
-                      <div className="col"><img class="tile-bg" src="./img/gui/robot-controller/turn_-1_disabled.png" alt="" /></div>
-                      <div className="col"><img class="tile-bg" src="./img/gui/robot-controller/turn_2.png" alt="" /></div>
-                      <div className="col"><img class="tile-bg" src="./img/gui/robot-controller/repeat_x_disabled.png" alt="" /></div>
-                      <div className="col"><img class="tile-bg" src="./img/gui/robot-controller/move_-1_disabled.png" alt="" /></div>
-                      <div className="col"><img class="tile-bg" src="./img/gui/robot-controller/move_1.png" alt="" /></div>
+                      <div className="col"><img class="tile-bg" onClick={()=>clickCard('handCards', 0)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[0])}.png`)} alt="" /></div>
+                      <div className="col"><img class="tile-bg" onClick={()=>clickCard('handCards', 1)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[1])}.png`)} alt="" /></div>
+                      <div className="col"><img class="tile-bg" onClick={()=>clickCard('handCards', 2)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[2])}.png`)} alt="" /></div>
+                      <div className="col"><img class="tile-bg" onClick={()=>clickCard('handCards', 3)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[3])}.png`)} alt="" /></div>
+                      <div className="col"><img class="tile-bg" onClick={()=>clickCard('handCards', 4)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[4])}.png`)} alt="" /></div>
+                      <div className="col"><img class="tile-bg" onClick={()=>clickCard('handCards', 5)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[5])}.png`)} alt="" /></div>
+                      <div className="col"><img class="tile-bg" onClick={()=>clickCard('handCards', 6)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[6])}.png`)} alt="" /></div>
+                      <div className="col"><img class="tile-bg" onClick={()=>clickCard('handCards', 7)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[7])}.png`)} alt="" /></div>
                   </div>
                       <br/> <br/>
               </div>
