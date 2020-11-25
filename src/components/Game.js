@@ -1,13 +1,14 @@
-import React, { Component, useEffect, useState } from "react";
+import React, { Component, useEffect, useState, useRef } from "react";
 import { withAuth } from "../lib/AuthProvider";
 import { io } from "socket.io-client";
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
-import Container from 'react-bootstrap/Container'
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
 import './Game.css'
 import {startingBoard, startingDeck, shuffle, orientationToString, findEmptyStartingPos} from '../utils/gameAct'
+// import { dragElement } from '../scripts/draggable';
+
+import Draggable from 'react-draggable'; 
+
 const socket = io("http://localhost:4000", {
   transports: ["websocket", "polling"],
 });
@@ -95,6 +96,8 @@ const Game = (props) => {
           socket.on('doActions',({newIPlayer, newIAction, newBoard, newPlayers, isTwo, creator})=>{
             handleActions(newIPlayer, newIAction, newPlayers, newBoard, isTwo, creator)
           })
+
+          document.body.classList.remove('home');
 
         return () => {
             socket.close();
@@ -271,174 +274,436 @@ const Game = (props) => {
   
 
   return (
-    <div>
-      {start || (
-        <div>
-      <div className="chat-container">
-        <header className="chat-header">
-          <h1>
-            <i className="fas fa-smile"></i> ChatCord
-          </h1>
-          <Link to='/allRooms'>
-            <button className='btn'>Leave Room</button>
-          </Link>
-        </header>
-        <main className="chat-main">
-          <div className="chat-sidebar">
-            <h3>
-              <i className="fas fa-comments"></i> Room Name: {room.name}
-            </h3>
-            <h2 id="room-name"></h2>
-            <h3>
-              <i className="fas fa-users"></i> Users
-            </h3>
-            <ul id="users">
-              {robots.map((robot, index)=> room.users.length-1 < index ? <li key={index}><button onClick={()=>addBot(index)} >Add bot</button></li> : <li key={index}>{room.users[index].username} : {room.users[index].robot}{creator &&<button onClick={()=>kickOut(room.users[index])}>Kick out</button>}</li>)}
-            </ul>
+  <div className="container container-body">
+      {/* END CHAT */}
+      <div className="float-left chat-container">
+          <div className="chat">
+              <button onClick={changeReady}>{(ready) ? 'Ready' : 'Not ready'}</button>
+              {room.users.every(user => user.ready === true) && creator &&<button onClick={startGame}>Play</button>}
           </div>
-          <div>
-            {robotChoice.map(robot=>{
-              return(<p onClick={()=>setRobotChosen(robot)}>{robot}</p>)
-
+      </div>
+      {/* END CHAT /*}
+      {/*  START PLAYERS */}
+      <div className="float-right robots-container">
+          <div className="robots">
+              <img className="" src={require("../img/gui/robot-controller/countdown_active_screen.png")}alt="" />
+              <img className="" src={require("../img/gui/robot-controller/countdown_active_screen.png")}alt="" />
+              <img className="" src={require("../img/gui/robot-controller/countdown_active_screen.png")}alt="" />
+              <img className="" src={require("../img/gui/robot-controller/countdown_active_screen.png")}alt="" />
+              <img className="" src={require("../img/gui/robot-controller/countdown_active_screen.png")}alt="" />
+              <img className="" src={require("../img/gui/robot-controller/countdown_disabled_screen.png")}alt="" />
+              <img className="" src={require("../img/gui/robot-controller/countdown_disabled_screen.png")}alt="" />
+              <img className="" src={require("../img/gui/robot-controller/countdown_disabled_screen.png")}alt="" />
+          </div>
+      </div>
+      {/* END PLAYERS */}
+    {start || (
+      // START ROBOT SELECTION
+      <div className="row r11 no-gutters">
+          <div className="col-12" style={{marginTop:'16px'}}><img className="tile-bg" src={require("../img/select-robot-header.png")} alt="" /></div>
+          <div className="col-12 select-robot-body">
+              <br/>
+          </div>
+          <div className="col-12"><img className="tile-bg" src={require("../img/select-robot-footer.png")} alt="" /></div>
+      </div>
+      // END ROBOT SELECTION
+    )}
+    {start && (
+    <>
+      <div className="row no-gutters align-self-bottom">
+          <div className="col-1 c0"><img className="tile-bg align-bottom" src={require("../img/tiles/left-top-coner.png")} alt="" /></div>
+          <div className="col-1 c1"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
+          <div className="col-1 c2"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
+          <div className="col-1 c3"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
+          <div className="col-1 c4"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
+          <div className="col-1 c5"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
+          <div className="col-1 c6"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
+          <div className="col-1 c7"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
+          <div className="col-1 c8"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
+          <div className="col-1 c9"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
+          <div className="col-1 c10"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
+          <div className="col-1 c11"><img className="tile-bg align-bottom" src={require("../img/tiles/right-top-corner.png")} alt="" /></div>
+      </div>
+      <div className="row no-gutters">
+          <div className="col-1 c0 tile"><img className="tile-bg" src={require("../img/tiles/top-wall-left.png")} alt="" /></div>
+          <div className="col-1 c1 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-38.png")} alt="" /></div>
+          <div className="col-1 c2 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-38.png")} alt="" /></div>
+          <div className="col-1 c3 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-38.png")} alt="" /></div>
+          <div className="col-1 c4 tile"><img className="tile-bg" src={require("../img/tiles/door-1.png")} alt="" /></div>
+          <div className="col-1 c5 tile"><img className="tile-bg" src={require("../img/tiles/door-2.png")} alt="" /></div>
+          <div className="col-1 c6 tile"><img className="tile-bg" src={require("../img/tiles/door-3.png")} alt="" /></div>
+          <div className="col-1 c7 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-38.png")} alt="" /></div>
+          <div className="col-1 c8 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-38.png")} alt="" /></div>
+          <div className="col-1 c9 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-38.png")} alt="" /></div>
+          <div className="col-1 c10 tile"><img className="tile-bg" src={require("../img/tiles/tile-lockers-4.png")} alt="" /></div>
+          <div className="col-1 c11"><img className="tile-bg" src={require("../img/tiles/tile-lockers-1.png")} alt="" /></div>
+      </div>
+      <div className="row no-gutters">
+          <div className="col-1 c0 tile"><img className="tile-bg" src={require("../img/tiles/left-wall-box.png")} alt="" /></div>
+          <div className="col-1 c1 tile"><img className="tile-bg" src={require("../img/tiles/left-wall-box-2.png")} alt="" /></div>
+          <div className="col-1 c2 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-39.png")} alt="" /></div>
+          <div className="col-1 c3 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-39.png")} alt="" /></div>
+          <div className="col-1 c4 tile"><img className="tile-bg" src={require("../img/tiles/door-4.png")} alt="" /></div>
+          <div className="col-1 c5 tile"><img className="tile-bg" src={require("../img/tiles/door-5.png")} alt="" /></div>
+          <div className="col-1 c6 tile"><img className="tile-bg" src={require("../img/tiles/door-6.png")} alt="" /></div>
+          <div className="col-1 c7 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-39.png")} alt="" /></div>
+          <div className="col-1 c8 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-39.png")} alt="" /></div>
+          <div className="col-1 c9 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-39.png")} alt="" /></div>
+          <div className="col-1 c10 tile"><img className="tile-bg" src={require("../img/tiles/tile-lockers-5.png")} alt="" /></div>
+          <div className="col-1 c11"><img className="tile-bg" src={require("../img/tiles/tile-lockers-2.png")} alt="" /></div>
+      </div>
+      {board.map((row, iRow)=>{
+        return(
+          <div key={iRow} className={'row no-gutters r'+iRow}>
+            {row.map((col,iCol)=>{
+              if(iCol === 0){
+                if(iRow === 0){
+                  return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/tile-boxes-1.png")} alt="" /></div>)
+                } else if(iRow === 1){
+                  return(<div key={iCol} className={`col-1 c${iCol} tile`}> <img className="tile-bg" src={require("../img/tiles/left-border-box.png")} alt="" /></div>)
+                } else{
+                  return(<div key={iCol} className={`col-1 c${iCol} tile`}> <img className="tile-bg" src={require("../img/tiles/left-border-regular-left-shadow.png")} alt="" /></div>)
+                }
+              } else if(iCol === 11 ){
+                if(iRow === 0){
+                  return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/tile-lockers-3.png")} alt="" /></div>)
+                } else if(iRow === 1){
+                  return(<div key={iCol} className={`col-1 c${iCol} tile`}> <img className="tile-bg" src={require("../img/tiles/right-border-box.png")} alt="" /></div>)
+                } else{
+                  return(<div key={iCol} className={`col-1 c${iCol} tile`}> <img className="tile-bg" src={require("../img/tiles/right-border-regular-shadow.png")} alt="" /></div>)
+                }
+              } else if(iRow === 0 && iCol === 1){
+                    return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/tile-boxes-2.png")} alt="" /></div>)
+              } else if(iRow === 0 && iCol === 10){
+                    return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/tile-lockers-6.png")} alt="" /></div>)
+              }
+        
+                else {
+                return (<div key={iCol} className={`col-1 c${iCol} tile`}>{col}</div>)
+              }
             })}
           </div>
-          <div className="chat-messages">
-              {room.messages.map((message, index)=>{
-                  return (
-                  <div key={index} className='message'><p className="meta">{message.username} <span>{message.time}</span></p>
-                    <p className="text">{message.text}</p></div>)})}
-          </div>
-        </main>
-        <div className="chat-form-container">
-          <form id="chat-form" onSubmit={(e)=>sendMessage(e)}>
-            <input
-              id="msg"
-              type="text"
-              placeholder="Enter Message"
-              required
-              autoComplete="off"
-            />
-            <button type='submit' className="btn">
-              <i className="fas fa-paper-plane"></i> Send
-            </button>
-          </form>
-          <button onClick={changeReady}>{(ready) ? 'Ready' : 'Not ready'}</button>
-            {room.users.every(user => user.ready === true) && creator &&<button onClick={startGame}>Play</button>}
-        </div>
+        )
+      })}
+      <div className="row no-gutters">
+        <div className="col-1 c0"><img className="tile-bg align-top" src={require("../img/tiles/left-bottom-corner.png")} alt="" /></div>
+        <div className="col-1 c1"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
+        <div className="col-1 c2"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
+        <div className="col-1 c3"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
+        <div className="col-1 c4"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
+        <div className="col-1 c5"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
+        <div className="col-1 c6"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
+        <div className="col-1 c7"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
+        <div className="col-1 c8"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
+        <div className="col-1 c9"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
+        <div className="col-1 c10"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
+        <div className="col-1 c11"><img className="tile-bg align-top" src={require("../img/tiles/right-bottom-corner.png")} alt="" /></div>
       </div>
-      </div>
-      )}
-      {start && (
-        <div className="container container-body">
-          <div className="row no-gutters align-self-bottom">
-              <div className="col-1 c0"><img className="tile-bg align-bottom" src={require("../img/tiles/left-top-coner.png")} alt="" /></div>
-              <div className="col-1 c1"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
-              <div className="col-1 c2"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
-              <div className="col-1 c3"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
-              <div className="col-1 c4"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
-              <div className="col-1 c5"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
-              <div className="col-1 c6"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
-              <div className="col-1 c7"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
-              <div className="col-1 c8"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
-              <div className="col-1 c9"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
-              <div className="col-1 c10"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
-              <div className="col-1 c11"><img className="tile-bg align-bottom" src={require("../img/tiles/right-top-corner.png")} alt="" /></div>
-          </div>
-          <div className="row no-gutters">
-              <div className="col-1 c0 tile"><img className="tile-bg" src={require("../img/tiles/top-wall-left.png")} alt="" /></div>
-              <div className="col-1 c1 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-38.png")} alt="" /></div>
-              <div className="col-1 c2 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-38.png")} alt="" /></div>
-              <div className="col-1 c3 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-38.png")} alt="" /></div>
-              <div className="col-1 c4 tile"><img className="tile-bg" src={require("../img/tiles/door-1.png")} alt="" /></div>
-              <div className="col-1 c5 tile"><img className="tile-bg" src={require("../img/tiles/door-2.png")} alt="" /></div>
-              <div className="col-1 c6 tile"><img className="tile-bg" src={require("../img/tiles/door-3.png")} alt="" /></div>
-              <div className="col-1 c7 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-38.png")} alt="" /></div>
-              <div className="col-1 c8 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-38.png")} alt="" /></div>
-              <div className="col-1 c9 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-38.png")} alt="" /></div>
-              <div className="col-1 c10 tile"><img className="tile-bg" src={require("../img/tiles/tile-lockers-4.png")} alt="" /></div>
-              <div className="col-1 c11"><img className="tile-bg" src={require("../img/tiles/tile-lockers-1.png")} alt="" /></div>
-          </div>
-          <div className="row no-gutters">
-              <div className="col-1 c0 tile"><img className="tile-bg" src={require("../img/tiles/left-wall-box.png")} alt="" /></div>
-              <div className="col-1 c1 tile"><img className="tile-bg" src={require("../img/tiles/left-wall-box-2.png")} alt="" /></div>
-              <div className="col-1 c2 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-39.png")} alt="" /></div>
-              <div className="col-1 c3 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-39.png")} alt="" /></div>
-              <div className="col-1 c4 tile"><img className="tile-bg" src={require("../img/tiles/door-4.png")} alt="" /></div>
-              <div className="col-1 c5 tile"><img className="tile-bg" src={require("../img/tiles/door-5.png")} alt="" /></div>
-              <div className="col-1 c6 tile"><img className="tile-bg" src={require("../img/tiles/door-6.png")} alt="" /></div>
-              <div className="col-1 c7 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-39.png")} alt="" /></div>
-              <div className="col-1 c8 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-39.png")} alt="" /></div>
-              <div className="col-1 c9 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-39.png")} alt="" /></div>
-              <div className="col-1 c10 tile"><img className="tile-bg" src={require("../img/tiles/tile-lockers-5.png")} alt="" /></div>
-              <div className="col-1 c11"><img className="tile-bg" src={require("../img/tiles/tile-lockers-2.png")} alt="" /></div>
-          </div>
-          {board.map((row, iRow)=>{
-            return(
-              <div key={iRow} className={'row no-gutters r'+iRow}>
-                {row.map((col,iCol)=>{
-                  if(iCol === 0){
-                    if(iRow === 0){
-                      return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/tile-boxes-1.png")} alt="" /></div>)
-                    } else if(iRow === 1){
-                      return(<div key={iCol} className={`col-1 c${iCol} tile`}> <img className="tile-bg" src={require("../img/tiles/left-border-box.png")} alt="" /></div>)
-                    } else{
-                      return(<div key={iCol} className={`col-1 c${iCol} tile`}> <img className="tile-bg" src={require("../img/tiles/left-border-regular-left-shadow.png")} alt="" /></div>)
-                    }
-                  } else if(iCol === 11 ){
-                    if(iRow === 0){
-                      return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/tile-lockers-3.png")} alt="" /></div>)
-                    } else if(iRow === 1){
-                      return(<div key={iCol} className={`col-1 c${iCol} tile`}> <img className="tile-bg" src={require("../img/tiles/right-border-box.png")} alt="" /></div>)
-                    } else{
-                      return(<div key={iCol} className={`col-1 c${iCol} tile`}> <img className="tile-bg" src={require("../img/tiles/right-border-regular-shadow.png")} alt="" /></div>)
-                    }
-                  } else if(iRow === 0 && iCol === 1){
-                        return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/tile-boxes-2.png")} alt="" /></div>)
-                  } else if(iRow === 0 && iCol === 10){
-                        return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/tile-lockers-6.png")} alt="" /></div>)
-                  }
-            
-                    else {
-                    return (<div key={iCol} className={`col-1 c${iCol} tile`}>{col}</div>)
-                  }
-                })}
-              </div>
-            )
-          })}
-          <div className="row no-gutters">
-            <div className="col-1 c0"><img className="tile-bg align-top" src={require("../img/tiles/left-bottom-corner.png")} alt="" /></div>
-            <div className="col-1 c1"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
-            <div className="col-1 c2"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
-            <div className="col-1 c3"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
-            <div className="col-1 c4"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
-            <div className="col-1 c5"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
-            <div className="col-1 c6"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
-            <div className="col-1 c7"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
-            <div className="col-1 c8"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
-            <div className="col-1 c9"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
-            <div className="col-1 c10"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
-            <div className="col-1 c11"><img className="tile-bg align-top" src={require("../img/tiles/right-bottom-corner.png")} alt="" /></div>
+
+      {/* START DRAGGABLE DECK*/}
+      <Draggable>
+        <div id="draggable" className="draggable-deck">
+            <div className="container deck-bg deck-container">
+                <div id="draggableheader" className="row no-gutters"></div>
+                <div id="" className="row no-gutters" style={{marginBottom: '4%'}}>
+                    <div className="col-8 d-flex align-items-center"><img className="robot-controller-title" src={require("../img/gui/robot-controller/robot-controller-title.png")} alt="" /></div>
+                    <div className="col-2 d-flex align-items-center" style={{paddingLeft:'4%', paddingRight:'1%'}}><img className="clock" src={require("../img/gui/robot-controller/clock_active.png")} alt="" /></div>
+                    <div className="col-2"><img className="tile-bg" src={require("../img/gui/robot-controller/countdown_disabled_screen.png")} alt="" /><h1 class="countdown">30"</h1></div>
+                </div>
+                <div className="row no-gutters" style={{marginBottom: '4%'}}>
+                    <div className="col-4">
+                        <img className="tile-bg" src="./img/gui/robot-controller/robot-placeholder.png" alt="" />
+                    </div>
+                    <div className="col-8">
+                        <div className="row cards-to-play no-gutters">
+                            <div className="col"><img className="tile-bg d-block mx-auto" src={require("../img/gui/robot-controller/turn_1_screen.png")} alt="" /></div>
+                            <div className="col"><img className="tile-bg d-block mx-auto" src="./img/gui/robot-controller/move_2_screen.png" alt="" /></div>
+                            <div className="col"><img className="tile-bg d-block mx-auto" src="./img/gui//robot-controller/turn_-1_screen.png" alt="" /></div>
+                            <div className="col"><img className="tile-bg d-block mx-auto" src="./img/gui/robot-controller/move_-1_screen.png" alt="" /></div>
+                            <div className="col"><img className="tile-bg d-block mx-auto" src="./img/gui/robot-controller/repeat_x_screen.png" alt="" /></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row  no-gutters">
+                    <div className="col"><img class="tile-bg" src="./img/gui/robot-controller/move_1.png" alt="" /></div>
+                    <div className="col"><img class="tile-bg" src="./img/gui/robot-controller/move_2_disabled.png" alt="" /></div>
+                    <div className="col"><img class="tile-bg" src="./img/gui/robot-controller/turn_1_disabled.png" alt="" /></div>
+                    <div className="col"><img class="tile-bg" src="./img/gui/robot-controller/turn_-1_disabled.png" alt="" /></div>
+                    <div className="col"><img class="tile-bg" src="./img/gui/robot-controller/turn_2.png" alt="" /></div>
+                    <div className="col"><img class="tile-bg" src="./img/gui/robot-controller/repeat_x_disabled.png" alt="" /></div>
+                    <div className="col"><img class="tile-bg" src="./img/gui/robot-controller/move_-1_disabled.png" alt="" /></div>
+                    <div className="col"><img class="tile-bg" src="./img/gui/robot-controller/move_1.png" alt="" /></div>
+                </div>
+                    <br/> <br/>
+            </div>
         </div>
-          
-          <div>
-              <div style={{display:'flex', justifyContent:'center'}}>
-                <p>{yourActions.name}:</p>
-                {yourActions.actions.map((card, iCard)=>{
-                  return (<p onClick={()=>clickCard('actions', iCard)} key={iCard}>{'|'+card[1]+' '+card[0]+'|'}</p>)
-                })}
-              </div>
-              <div style={{display:'flex', justifyContent:'center'}}>
-                {yourActions.handCards.map((card, iCard)=>{
-                  return (<p onClick={()=>clickCard('handCards', iCard)} key={iCard}>{'|'+card[1]+' '+card[0]+'|'}</p>)
-                })}
-              </div>
-              <button onClick={()=>endTurn()}>End Turn</button>
-              <p>{counter} counter</p>
-          </div>
+      </Draggable>
+
+        {/* END DRAGGABLE DECK */}
+        {/* START STATIC DECK */}
+        <div className="container deck-bg static-deck-container">
+            <div id="" className="row no-gutters first-row" style={{marginBottom: '4%'}}>
+                <div className="col-8 d-flex align-items-center"><img className="robot-controller-title" src={require("../img/gui/robot-controller/robot-controller-title.png")}alt="" /></div>
+                    {/* <div className="col-1"></div> */}
+                <div className="col-2 d-flex align-items-center" style={{paddingLeft:'4%', paddingRight:'1%'}}><img className="clock" src={require("../img/gui/robot-controller/clock_active.png")}alt="" /></div>
+                <div className="col-2"><img className="tile-bg" src={require("../img/gui/robot-controller/countdown_disabled_screen.png")}alt="" /><h1 className="countdown">30"</h1></div>
+            </div>
+            <div className="row no-gutters" style={{marginBottom: '4%'}}>
+                <div className="col-4">
+                    <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
+                </div>
+                <div className="col-8">
+                    <div className="row cards-to-play no-gutters">
+                        <div className="col"><img className="tile-bg d-block mx-auto" src={require("../img/gui/robot-controller/turn_1_screen.png")}alt="" /></div>
+                        <div className="col"><img className="tile-bg d-block mx-auto" src={require("../img/gui/robot-controller/move_2_screen.png")}alt="" /></div>
+                        <div className="col"><img className="tile-bg d-block mx-auto" src={require("../img/gui//robot-controller/turn_-1_screen.png")}alt="" /></div>
+                        <div className="col"><img className="tile-bg d-block mx-auto" src={require("../img/gui/robot-controller/move_-1_screen.png")}alt="" /></div>
+                        <div className="col"><img className="tile-bg d-block mx-auto" src={require("../img/gui/robot-controller/repeat_x_screen.png")}alt="" /></div>
+                    </div>
+                </div>
+            </div>
+            <div className="row  no-gutters">
+                <div className="col"><img className="tile-bg" src={require("../img/gui/robot-controller/move_1.png")}alt="" /></div>
+                <div className="col"><img className="tile-bg" src={require("../img/gui/robot-controller/move_2_disabled.png")}alt="" /></div>
+                <div className="col"><img className="tile-bg" src={require("../img/gui/robot-controller/turn_1_disabled.png")}alt="" /></div>
+                <div className="col"><img className="tile-bg" src={require("../img/gui/robot-controller/turn_-1_disabled.png")}alt="" /></div>
+                <div className="col"><img className="tile-bg" src={require("../img/gui/robot-controller/turn_2.png")}alt="" /></div>
+                <div className="col"><img className="tile-bg" src={require("../img/gui/robot-controller/repeat_x_disabled.png")}alt="" /></div>
+                <div className="col"><img className="tile-bg" src={require("../img/gui/robot-controller/move_-1_disabled.png")}alt="" /></div>
+                <div className="col"><img className="tile-bg" src={require("../img/gui/robot-controller/move_1.png")}alt="" /></div>
+            </div>
+                <hr/>
         </div>
-      )}
-    </div>
-  );
-};
+        {/* END STATIC DECK */}
+        {/* START STATIC ROBOTS */}
+        <div className="container robot-placeholder static-deck-container">
+            <div id="" className="row no-gutters first-row" style={{marginBottom: '6%'}}>
+            </div>
+            <div className="row no-gutters" style={{marginBottom:'4%'}}>
+                <div className="col-3">
+                    <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
+                </div>
+                <div className="col-3">
+                    <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
+                </div>
+                <div className="col-3">
+                    <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
+                </div>
+                <div className="col-3">
+                    <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
+                </div>
+            </div>
+            <div className="row no-gutters" style={{marginBottom: '4%'}}>
+                <div className="col-3">
+                    <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
+                </div>
+                <div className="col-3">
+                    <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
+                </div>
+                <div className="col-3">
+                    <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
+                </div>
+                <div className="col-3">
+                    <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
+                </div>
+            </div>
+            <hr/>
+        </div>
+        {/* STRAT STATIC DECK */}
+        {/* START LOW RES CHAT */}
+        <div className="container robot-placeholder static-deck-container">
+            <div id="" className="row no-gutters first-row" style={{marginBottom: '6%'}}>
+            </div>
+            <div className="row no-gutters" style={{marginBottom: '4%'}}>
+                <div className="col-3">
+                    <div style={{border: '2px solid #202020', minHeight:'120px', width:'385px', borderRadius: '10px', backgroundColor: '#343434'}}></div>
+                </div>
+            </div>
+            <hr/>
+            <hr/>
+        </div>
+        {/* END LOW RES CHAT */}
+        {/*- START CHAT FOR MID SIZE RESOLUTIONS */}
+            <div className="container chat-mid-res-bg">
+                <div id="draggableheader" className="row no-gutters" style={{marginBottom:'3%'}}></div>
+                <div className="row">
+                    <div className="col-12"></div>
+                </div>
+            </div>
+        {/*- END CHAT FOR MID SIZE RESOLUTIONS */}
+
+
+
+    </>
+  )}
+  </div>
+)}
 
 export default withAuth(Game);
+
+
+
+// <div>
+// {start || (
+//   <div>
+// <div className="chat-container">
+//   <header className="chat-header">
+//     <h1>
+//       <i className="fas fa-smile"></i> ChatCord
+//     </h1>
+//     <Link to='/allRooms'>
+//       <button className='btn'>Leave Room</button>
+//     </Link>
+//   </header>
+//   <main className="chat-main">
+//     <div className="chat-sidebar">
+//       <h3>
+//         <i className="fas fa-comments"></i> Room Name: {room.name}
+//       </h3>
+//       <h2 id="room-name"></h2>
+//       <h3>
+//         <i className="fas fa-users"></i> Users
+//       </h3>
+//       <ul id="users">
+//         {robots.map((robot, index)=> room.users.length-1 < index ? <li key={index}><button onClick={()=>addBot(index)} >Add bot</button></li> : <li key={index}>{room.users[index].username} : {room.users[index].robot}{creator &&<button onClick={()=>kickOut(room.users[index])}>Kick out</button>}</li>)}
+//       </ul>
+//     </div>
+//     <div>
+//       {robotChoice.map(robot=>{
+//         return(<p onClick={()=>setRobotChosen(robot)}>{robot}</p>)
+
+//       })}
+//     </div>
+//     <div className="chat-messages">
+//         {room.messages.map((message, index)=>{
+//             return (
+//             <div key={index} className='message'><p className="meta">{message.username} <span>{message.time}</span></p>
+//               <p className="text">{message.text}</p></div>)})}
+//     </div>
+//   </main>
+//   <div className="chat-form-container">
+//     <form id="chat-form" onSubmit={(e)=>sendMessage(e)}>
+//       <input
+//         id="msg"
+//         type="text"
+//         placeholder="Enter Message"
+//         required
+//         autoComplete="off"
+//       />
+//       <button type='submit' className="btn">
+//         <i className="fas fa-paper-plane"></i> Send
+//       </button>
+//     </form>
+//   </div>
+// </div>
+// </div>
+// )}
+{/* {start && (
+
+    <div className="row no-gutters align-self-bottom">
+        <div className="col-1 c0"><img className="tile-bg align-bottom" src={require("../img/tiles/left-top-coner.png")} alt="" /></div>
+        <div className="col-1 c1"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
+        <div className="col-1 c2"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
+        <div className="col-1 c3"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
+        <div className="col-1 c4"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
+        <div className="col-1 c5"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
+        <div className="col-1 c6"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
+        <div className="col-1 c7"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
+        <div className="col-1 c8"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
+        <div className="col-1 c9"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
+        <div className="col-1 c10"><img className="tile-bg align-bottom" src={require("../img/tiles/TileSep-13.png")} alt="" /></div>
+        <div className="col-1 c11"><img className="tile-bg align-bottom" src={require("../img/tiles/right-top-corner.png")} alt="" /></div>
+    </div>
+    <div className="row no-gutters">
+        <div className="col-1 c0 tile"><img className="tile-bg" src={require("../img/tiles/top-wall-left.png")} alt="" /></div>
+        <div className="col-1 c1 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-38.png")} alt="" /></div>
+        <div className="col-1 c2 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-38.png")} alt="" /></div>
+        <div className="col-1 c3 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-38.png")} alt="" /></div>
+        <div className="col-1 c4 tile"><img className="tile-bg" src={require("../img/tiles/door-1.png")} alt="" /></div>
+        <div className="col-1 c5 tile"><img className="tile-bg" src={require("../img/tiles/door-2.png")} alt="" /></div>
+        <div className="col-1 c6 tile"><img className="tile-bg" src={require("../img/tiles/door-3.png")} alt="" /></div>
+        <div className="col-1 c7 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-38.png")} alt="" /></div>
+        <div className="col-1 c8 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-38.png")} alt="" /></div>
+        <div className="col-1 c9 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-38.png")} alt="" /></div>
+        <div className="col-1 c10 tile"><img className="tile-bg" src={require("../img/tiles/tile-lockers-4.png")} alt="" /></div>
+        <div className="col-1 c11"><img className="tile-bg" src={require("../img/tiles/tile-lockers-1.png")} alt="" /></div>
+    </div>
+    <div className="row no-gutters">
+        <div className="col-1 c0 tile"><img className="tile-bg" src={require("../img/tiles/left-wall-box.png")} alt="" /></div>
+        <div className="col-1 c1 tile"><img className="tile-bg" src={require("../img/tiles/left-wall-box-2.png")} alt="" /></div>
+        <div className="col-1 c2 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-39.png")} alt="" /></div>
+        <div className="col-1 c3 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-39.png")} alt="" /></div>
+        <div className="col-1 c4 tile"><img className="tile-bg" src={require("../img/tiles/door-4.png")} alt="" /></div>
+        <div className="col-1 c5 tile"><img className="tile-bg" src={require("../img/tiles/door-5.png")} alt="" /></div>
+        <div className="col-1 c6 tile"><img className="tile-bg" src={require("../img/tiles/door-6.png")} alt="" /></div>
+        <div className="col-1 c7 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-39.png")} alt="" /></div>
+        <div className="col-1 c8 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-39.png")} alt="" /></div>
+        <div className="col-1 c9 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-39.png")} alt="" /></div>
+        <div className="col-1 c10 tile"><img className="tile-bg" src={require("../img/tiles/tile-lockers-5.png")} alt="" /></div>
+        <div className="col-1 c11"><img className="tile-bg" src={require("../img/tiles/tile-lockers-2.png")} alt="" /></div>
+    </div>
+    {board.map((row, iRow)=>{
+      return(
+        <div key={iRow} className={'row no-gutters r'+iRow}>
+          {row.map((col,iCol)=>{
+            if(iCol === 0){
+              if(iRow === 0){
+                return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/tile-boxes-1.png")} alt="" /></div>)
+              } else if(iRow === 1){
+                return(<div key={iCol} className={`col-1 c${iCol} tile`}> <img className="tile-bg" src={require("../img/tiles/left-border-box.png")} alt="" /></div>)
+              } else{
+                return(<div key={iCol} className={`col-1 c${iCol} tile`}> <img className="tile-bg" src={require("../img/tiles/left-border-regular-left-shadow.png")} alt="" /></div>)
+              }
+            } else if(iCol === 11 ){
+              if(iRow === 0){
+                return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/tile-lockers-3.png")} alt="" /></div>)
+              } else if(iRow === 1){
+                return(<div key={iCol} className={`col-1 c${iCol} tile`}> <img className="tile-bg" src={require("../img/tiles/right-border-box.png")} alt="" /></div>)
+              } else{
+                return(<div key={iCol} className={`col-1 c${iCol} tile`}> <img className="tile-bg" src={require("../img/tiles/right-border-regular-shadow.png")} alt="" /></div>)
+              }
+            } else if(iRow === 0 && iCol === 1){
+                  return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/tile-boxes-2.png")} alt="" /></div>)
+            } else if(iRow === 0 && iCol === 10){
+                  return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/tile-lockers-6.png")} alt="" /></div>)
+            }
+      
+              else {
+              return (<div key={iCol} className={`col-1 c${iCol} tile`}>{col}</div>)
+            }
+          })}
+        </div>
+      )
+    })}
+    <div className="row no-gutters">
+      <div className="col-1 c0"><img className="tile-bg align-top" src={require("../img/tiles/left-bottom-corner.png")} alt="" /></div>
+      <div className="col-1 c1"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
+      <div className="col-1 c2"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
+      <div className="col-1 c3"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
+      <div className="col-1 c4"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
+      <div className="col-1 c5"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
+      <div className="col-1 c6"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
+      <div className="col-1 c7"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
+      <div className="col-1 c8"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
+      <div className="col-1 c9"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
+      <div className="col-1 c10"><img className="tile-bg align-top" src={require("../img/tiles/TileSep-7.png")} alt="" /></div>
+      <div className="col-1 c11"><img className="tile-bg align-top" src={require("../img/tiles/right-bottom-corner.png")} alt="" /></div>
+  </div> */}
+    
+    {/* <div>
+        <div style={{display:'flex', justifyContent:'center'}}>
+          <p>{yourActions.name}:</p>
+          {yourActions.actions.map((card, iCard)=>{
+            return (<p onClick={()=>clickCard('actions', iCard)} key={iCard}>{'|'+card[1]+' '+card[0]+'|'}</p>)
+          })}
+        </div>
+        <div style={{display:'flex', justifyContent:'center'}}>
+          {yourActions.handCards.map((card, iCard)=>{
+            return (<p onClick={()=>clickCard('handCards', iCard)} key={iCard}>{'|'+card[1]+' '+card[0]+'|'}</p>)
+          })}
+        </div>
+        <button onClick={()=>endTurn()}>End Turn</button>
+        <p>{counter} counter</p>
+    </div> */}
+  {/* </div>
+)} */}

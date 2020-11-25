@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import "./App.css";
 import { Switch, Route } from "react-router-dom";
 import AuthProvider from "./lib/AuthProvider";
-import 'bootstrap/dist/css/bootstrap.min.css';
+import './css/bootstrap.min.css'
 import './css/Styles.css';
-import './css/Handle-elements.css';
 import './css/Draggable.css';
+import './css/Handle-elements.css';
 import Navbar from "./components/Navbar";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
