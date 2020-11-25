@@ -155,6 +155,8 @@ h1 {
     background: url(../img/select-robot-body-bg.png);
     background-size: 100%;
     background-repeat: repeat-y;
+    padding-top:8%;
+    padding-bottom:8%
 }
 
 .deck-bg {
@@ -369,4 +371,9 @@ h1 {
     width: 166px;
     height: 68px;
     margin-bottom:5px;
+}
+
+.robot-selection-btn {
+    width:25%;
+    cursor: pointer;
 }
