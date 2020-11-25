@@ -90,6 +90,12 @@ const Game = (props) => {
             setRobotsTaken(prev=>[...prev, robot])
             if(robotChosen === robot){setRobotChosen('')}
           })
+
+          socket.on('enableRobot',({robot})=>{
+            console.log(robot, 'enabled')
+            let newRobotChosen = robotChosen.filter(name=>name!==robot)
+            setRobotsTaken(newRobotChosen)
+          })
           
 
           document.body.classList.remove('home');
@@ -334,13 +340,13 @@ const Game = (props) => {
               {robots.map((robot, index)=>{
                 return players.length>index ? (
                 <>{
-                  creator?
+                  creator && !start?
                   <img onClick={()=>kickOut(room.users[index])} className="" src={require(`../img/gui/robot-screen-${players[index].name}.png`)}alt="" /> :
                   <img className="" src={require(`../img/gui/robot-screen-${players[index].name}.png`)}alt="" />
                   }
                   <p style={{color:`${roboColor(players[index].name)}`}}>{players[index].username}</p>
                 </>
-              ) : creator?
+              ) : creator && !start?
                 (<img onClick={()=>addBot(index)} className="" src={require(`../img/gui/robot-screen-placeholder.png`)}alt="" /> ):(
                 <img className="" src={require(`../img/gui/robot-screen-placeholder.png`)}alt="" />)
               })}             
