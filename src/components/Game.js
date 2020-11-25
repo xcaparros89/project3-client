@@ -299,7 +299,7 @@ const Game = (props) => {
       {/*  START PLAYERS */}
       <div className="float-right robots-container">
           <div className="robots">
-              <img className="" src={require("../img/gui/robot-controller/countdown_active_screen.png")}alt="" />
+              <img className="" src={require("../img/gui/robot_tn.png")}alt="" />
               <img className="" src={require("../img/gui/robot-controller/countdown_active_screen.png")}alt="" />
               <img className="" src={require("../img/gui/robot-controller/countdown_active_screen.png")}alt="" />
               <img className="" src={require("../img/gui/robot-controller/countdown_active_screen.png")}alt="" />
