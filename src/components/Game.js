@@ -299,14 +299,14 @@ const Game = (props) => {
       {/*  START PLAYERS */}
       <div className="float-right robots-container">
           <div className="robots">
-              <img className="" src={require("../img/gui/robot_tn.png")}alt="" />
-              <img className="" src={require("../img/gui/robot-controller/countdown_active_screen.png")}alt="" />
-              <img className="" src={require("../img/gui/robot-controller/countdown_active_screen.png")}alt="" />
-              <img className="" src={require("../img/gui/robot-controller/countdown_active_screen.png")}alt="" />
-              <img className="" src={require("../img/gui/robot-controller/countdown_active_screen.png")}alt="" />
-              <img className="" src={require("../img/gui/robot-controller/countdown_disabled_screen.png")}alt="" />
-              <img className="" src={require("../img/gui/robot-controller/countdown_disabled_screen.png")}alt="" />
-              <img className="" src={require("../img/gui/robot-controller/countdown_disabled_screen.png")}alt="" />
+              <img className="" src={require("../img/gui/robot-screen-qVe.png")}alt="" />
+              <img className="" src={require("../img/gui/robot-screen-cAm.png")}alt="" />
+              <img className="" src={require("../img/gui/robot-screen-cVe.png")}alt="" />
+              <img className="" src={require("../img/gui/robot-screen-cVi.png")}alt="" />
+              <img className="" src={require("../img/gui/robot-screen-tAm.png")}alt="" />
+              <img className="" src={require("../img/gui/robot-screen-tVe.png")}alt="" />
+              <img className="" src={require("../img/gui/robot-screen-tVi.png")}alt="" />
+              <img className="" src={require("../img/gui/robot-screen-hAm.png")}alt="" />
           </div>
       </div>
       {/* END PLAYERS */}
