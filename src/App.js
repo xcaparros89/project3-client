@@ -31,7 +31,8 @@ class App extends Component {
             <PrivateRoute exact path='/private' component={Private} />
             <Route exact path='/Lobby' component={Lobby}/>
             <Route exact path='/allRooms' component={AllRooms}/>
-            <Route exact path='/rooms/:id' component={Game}/>
+            <Route exact path='/rooms/:id' component={(props)=><Game {...props} />}/>
+
           </Switch>
       </AuthProvider>
     );

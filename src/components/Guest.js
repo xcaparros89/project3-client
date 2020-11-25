@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { withAuth } from "../lib/AuthProvider";
+import { Redirect } from 'react-router-dom';
 import logo from "../img/logo.png"
 import playBtn from "../img/btn/btn-play.png";
 import $ from 'jquery';
@@ -27,6 +28,7 @@ class Guest extends Component {
   render() {
     const { guest } = this.state;
     return (
+        <> {this.props.isLoggedin && <Redirect to='/allRooms' />}
     <div className="container login-container d-flex align-items-center" style={{marginTop:'5%'}}>
         <div className="container home-bg">
             <div className="row no-gutters">
@@ -51,6 +53,7 @@ class Guest extends Component {
             </div>
         </div>
     </div>
+    </>
     );
   }
 }

@@ -30,7 +30,7 @@ class Login extends Component {
   render() {
     const { username, password } = this.state;
     return (
-      
+          <> {this.props.isLoggedin && <Redirect to='/allRooms' />}
           <div className="container login-container d-flex align-items-center" style={{marginTop:'5%'}}>
         <div className="container home-bg">
             <div className="row no-gutters">
@@ -57,6 +57,7 @@ class Login extends Component {
             </div>
         </div>
     </div>
+    </>
     );
   }
 }

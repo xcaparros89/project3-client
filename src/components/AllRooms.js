@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import shortid from 'shortid'
-import { useHistory } from "react-router-dom";
+import { useHistory, Redirect } from "react-router-dom";
 import { withAuth } from "../lib/AuthProvider";
 import axios from "axios";
 import newGameBtn from "../img/btn/btn-new-game.png"
@@ -10,33 +10,33 @@ export function AllRooms(props){
     
     const [roomArr, setRoomArr] =useState([])//NECESITAMOS QUE LAS ROOMS DESAPAREZCAN CUANDO NO HAYA NADIE Y QUE PONGA LA CANTIDAD DE GENTE QUE TIENEN
     const history = useHistory();
-
+    const [id, setId] = useState('')
     document.body.classList.add('home'); // Remove big BG
 
     useEffect(()=>{
         async function fetchData(){
-        const rooms = await axios.get("http://localhost:4000/rooms/getAllRooms")
+        const rooms = await axios.get(process.env.REACT_APP_API_URL + "/rooms/getAllRooms")
         setRoomArr(rooms.data)
       }; fetchData();
     }, []);
     
     let createGame = async ()=>{
         let id=shortid.generate();
-        const rooms = await axios.post("http://localhost:4000/rooms/addRoom", {id, creator:props.user.username})
+        const rooms = await axios.post(process.env.REACT_APP_API_URL + "/rooms/addRoom", {id, creator:props.user.username})
         setRoomArr(rooms.data);
         history.push({pathname: `/rooms/${id}`, state:{creator:props.user.username}})
     }
 
     let joinGame = async (id, index)=>{
         if(roomArr[index].users.length !== 8){
-            const rooms = await axios.post("http://localhost:4000/rooms/addUser", {id, user:props.user.username})
+            const rooms = await axios.post(process.env.REACT_APP_API_URL + "/rooms/addUser", {id, user:props.user.username})
             setRoomArr(rooms.data);
-            history.push(`/rooms/${id}`)
+            setId(id)
         }
     }
         return (
-
-
+            <>
+            {id.length>0 && <Redirect to={`/rooms/${id}`} />}
             <div className="container login-container d-flex align-items-center" style={{marginTop:'5%'}}>
             <div className="container">
                 <div className="row no-gutters rooms" style={{minHeight:'500px'}}>
@@ -54,6 +54,7 @@ export function AllRooms(props){
                 </div>
             </div>
         </div>
+        </>
         )
 }
 

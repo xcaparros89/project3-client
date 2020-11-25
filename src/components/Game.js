@@ -8,7 +8,7 @@ import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import './Game.css'
 import {startingBoard, startingDeck, shuffle, orientationToString, findEmptyStartingPos} from '../utils/gameAct'
-const socket = io("http://localhost:4000", {
+const socket = io(process.env.REACT_APP_API_URL, {
   transports: ["websocket", "polling"],
 });
 const Game = (props) => {
@@ -39,67 +39,6 @@ const Game = (props) => {
     const [id, setId] = useState('');
     const [disabled, setDisabled] = useState([])
     const [counter, setCounter] = useState(10);
-
-    useEffect(() => {
-        if(props.history.location.state){ setCreator(props.history.location.state.creator)};
-        socket.emit("join", { username: props.user.username, room: props.match.params.id});
-        socket.on('roomUsers', ({users, username, id}) =>{setRoom(prevRoom=>({...prevRoom, users})); if(id && username === props.user.username)setId(id)});
-        socket.on('message',message=>{
-            setRoom(prevState=>({...prevState, messages:[...prevState.messages, message]}))
-            //Scroll down
-            //const chatMessages = document.querySelector('.chat-messages')
-            //if(chatMessages){chatMessages.scrollTop = chatMessages.scrollHeight};
-          });
-          socket.on('bye', ({id})=>{if(id===socket.id){history.push({pathname: `/allRooms`})}})
-
-          
-          socket.on('startGame', ({game})=>{
-            setPlayers(game.players);
-            setBoard(game.board);
-            setStart(true)
-            let newYourActions = game.players.find(player=>player.id === socket.id)
-            setYourActions({actions: newYourActions.actions, handCards:newYourActions.handCards, cardPicked:''})
-          })
-          
-          socket.on('startTurn', ({game})=>{
-            setPlayers(game.players);
-            setBoard(game.board);
-            setDisabled([])
-            let newYourActions = game.players.find(player=>player.id === socket.id)
-            setYourActions({actions: newYourActions.actions, handCards:newYourActions.handCards, cardPicked:''})
-          })
-
-          socket.on('cardAdded', ({game})=>{
-            console.log(game, 'cardAdded')
-          })//ES POT BORRAR, DEIXAR PER ARA PER TESTS
-
-          socket.on('addedAllActions', ({game})=>{
-            let newYourActions = game.players.find(player=>player.id === socket.id)
-            setYourActions({actions: newYourActions.actions, handCards:newYourActions.handCards, cardPicked:''});
-            handleActions(0, 0, game.players, game.board, false);
-            console.log(game)
-          })
-
-          socket.on('startCountdown', ()=>{
-            console.log('before disable')
-            setCounter(10)
-            setDisabled(prevDisabled=>[...prevDisabled, 'endTurn'])
-            setTimeout(()=>setDisabled(prevDisabled=>[...prevDisabled, 'clickCard']), 10000);
-            console.log('after disable')
-          })
-        
-          socket.on('finishGame',({winner, newBoard, newPlayers})=>{
-            console.log('the winner is: ', winner)
-          })
-
-          socket.on('doActions',({newIPlayer, newIAction, newBoard, newPlayers, isTwo, creator})=>{
-            handleActions(newIPlayer, newIAction, newPlayers, newBoard, isTwo, creator)
-          })
-
-        return () => {
-            socket.close();
-        }
-    }, [])
 
     useEffect(()=>{counter > 0 && setTimeout(() => setCounter(counter - 1), 1000)}, [counter])
 
@@ -148,6 +87,7 @@ const Game = (props) => {
       let newY = y;
       let newX = x;
       orientation === 'up' || orientation === 'down' ?  newY -=newNum : newX+=newNum;
+      if(newY >=0){
       if(handleBoard[newY][newX]===' '){//move into an empty place
         handleBoard[y].splice(x, 1, ' '); 
         handleBoard[newY].splice(newX, 1, player.name);
@@ -160,6 +100,7 @@ const Game = (props) => {
       } else if(robots.includes(handleBoard[newY][newX])){ //move into another robot
         let evenNewerY = y=== newY? y : y<newY? newY+1 : newY-1;
         let evenNewerX = x=== newX? x : x<newX? newX+1 : newX-1;
+        if(evenNewerY >=0){
         if(handleBoard[evenNewerY][evenNewerX] === ' ' || handleBoard[evenNewerY][evenNewerX] === 'pit'){ //if the other robot would move into an obstacle or another robot nothing happens
           let indexOther = handlePlayers.findIndex(robot=>robot.pos[0] === newY && robot.pos[1] === newX);
           let otherPlayer = handlePlayers[indexOther];
@@ -176,7 +117,9 @@ const Game = (props) => {
             handleBoard[startingPos[0]].splice(startingPos[1], 1, otherPlayer.name);
           }
         }
+        }
       }
+    }
       setBoard(handleBoard);
       setPlayers(handlePlayers)
       return {newPlayers:handlePlayers, newBoard:handleBoard};
@@ -217,13 +160,14 @@ const Game = (props) => {
         socket.emit('prepareGame', {room: room.id, users:room.users} );
     }
 
-    const addBot = (num) =>{
+    const addBot = async (num) =>{
       //Add user in axios too
       socket.emit("join", { username: `Bot-${num}`, room: props.match.params.id, isBot:true});
+      await axios.post(process.env.REACT_APP_API_URL + "/rooms/addUser", {id:room.id, user:`Bot-${num}`})
     }
 
     const kickOut = async (user) =>{
-      //await axios.post("http://localhost:4000/rooms/removeUser", {name:user.name})
+      await axios.post(process.env.REACT_APP_API_URL + "/rooms/removeUser", {user:user.username, id: room.id})
       socket.emit('kickOut', {userId: user.id, room: props.match.params.id, isBot:true})
     }
 
@@ -298,7 +242,11 @@ const Game = (props) => {
           </div>
           <div>
             {robotChoice.map(robot=>{
+              if(disabled.includes(robot)){
+              return(<p className='disabled'>{robot}</p>)
+              }else{
               return(<p onClick={()=>setRobotChosen(robot)}>{robot}</p>)
+              }
 
             })}
           </div>
