@@ -12,7 +12,7 @@ const socket = io("http://localhost:4000", {
   transports: ["websocket", "polling"],
 });
 const Game = (props) => {
-  const robotChoice= ['x', 'y', 'z', 'a', 's', 'd', 'f', 'j','1','2','3','4'];
+  const robotChoice= ['cam', 'cve', 'cvi', 'ham', 'hve', 'hvi', 'qam', 'qve', 'qvi', 'tam', 'tve', 'tvi'];
   const history = useHistory();
     const [room, setRoom] = useState({name:props.user.username, id:props.match.params.id, users:[], messages:[]})
     const [ready, setReady] = useState(false);
@@ -30,7 +30,7 @@ const Game = (props) => {
     useEffect(() => {
         if(props.history.location.state){ setCreator(props.history.location.state.creator)};
         socket.emit("join", { username: props.user.username, room: props.match.params.id});
-        socket.on('roomUsers', ({users, username, id}) =>{setRoom(prevRoom=>({...prevRoom, users})); if(id && username === props.user.username)setId(id)});
+        socket.on('roomUsers', ({users, username, id}) =>{console.log(users); setRoom(prevRoom=>({...prevRoom, users})); if(id && username === props.user.username)setId(id)});
         socket.on('message',message=>{
             setRoom(prevState=>({...prevState, messages:[...prevState.messages, message]}))
             //Scroll down
@@ -202,6 +202,7 @@ const Game = (props) => {
     }
 
     const changeReady = () => {
+        console.log(robotChosen)
         socket.emit('ready', { user:props.user.username, room:room.id, robotChosen });
         setReady(!ready);
     }
@@ -271,6 +272,12 @@ const Game = (props) => {
       }
     }
 
+    let mecoName = (name) =>{
+      console.log(players)
+      let player =  players.filter(player=>player.name === name)
+      return name+'_'+player[0].orientation
+    }
+
   return (
   <div className="container container-body">
       {/* END CHAT */}
@@ -297,14 +304,17 @@ const Game = (props) => {
       {/*  START PLAYERS */}
       <div className="float-right robots-container">
           <div className="robots">
-              <img className="" src={require("../img/gui/robot-screen-qVe.png")}alt="" />
-              <img className="" src={require("../img/gui/robot-screen-cAm.png")}alt="" />
-              <img className="" src={require("../img/gui/robot-screen-cVe.png")}alt="" />
-              <img className="" src={require("../img/gui/robot-screen-cVi.png")}alt="" />
-              <img className="" src={require("../img/gui/robot-screen-tAm.png")}alt="" />
-              <img className="" src={require("../img/gui/robot-screen-tVe.png")}alt="" />
-              <img className="" src={require("../img/gui/robot-screen-tVi.png")}alt="" />
-              <img className="" src={require("../img/gui/robot-screen-hAm.png")}alt="" />
+              {robots.map((robot, index)=>{
+                return room.users.length>index? (
+                <>
+                  <img className="" src={require(`../img/gui/robot-screen-${room.users[index].robot}.png`)}alt="" />
+                  <p>{room.users[index].username}</p>
+                </>
+              ) : (
+                <img className="" src={require(`../img/gui/robot-screen-placeholder.png`)}alt="" />
+              )
+              })}             
+
           </div>
       </div>
       {/* END PLAYERS */}
@@ -316,7 +326,7 @@ const Game = (props) => {
             <div className="col-12 select-robot-body d-flex justify-content-center" style={{flexDirection:'column', alignItems:'center'}}>
               <div className="row d-flex justify-content-center text-center" style={{width:'90%'}}>
               {robotChoice.map(robot=>{
-              return(<div className="col-4"><p onClick={()=>setRobotChosen(robot)}>{robot}</p> <br/> <br/> </div>  )
+              return(<div className="col-4"><img className='tile-bg' src={require(`../img/robot-sprites/${robot}_down.png`)} onClick={()=>setRobotChosen(robot)} alt={robot} /> <br/> <br/> </div>  )
             })}
               </div>
               <div className="row d-flex justify-content-center text-center" style={{width:'90%'}}>
@@ -413,9 +423,10 @@ const Game = (props) => {
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/TileSep-60.png")} alt="" /></div>)
                 } else if(iRow === 11 && iCol === 10 ){
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/TileSep-59.png")} alt="" /></div>)
+                } else if(robotChoice.includes(col)){
+                  return (<div key={iCol} className={`col-1 c${iCol} tile`}>{mecoName(col)}</div>)
                 }
-          
-                  else {
+                 else {
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}>{col}</div>)
                 }
               })}
