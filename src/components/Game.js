@@ -221,8 +221,10 @@ const Game = (props) => {
 
     const changeReady = () => {
         console.log(robotChosen)
-        socket.emit('ready', { user:props.user.username, room:room.id, robotChosen });
-        setReady(!ready);
+        if(robotChosen){
+          socket.emit('ready', { user:props.user.username, room:room.id, robotChosen });
+          setReady(!ready);
+        }
     }
 
     const startGame = () => {
