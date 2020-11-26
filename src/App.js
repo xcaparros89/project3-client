@@ -6,7 +6,6 @@ import './css/bootstrap.min.css'
 import './css/Styles.css';
 import './css/Draggable.css';
 import './css/Handle-elements.css';
-import Navbar from "./components/Navbar";
 import Signup from "./components/Signup";
 import Login from "./components/Login";
 import Guest from "./components/Guest";
@@ -22,7 +21,6 @@ class App extends Component {
   render() {
     return (
       <AuthProvider>
-        <Navbar />
           <Switch>
             <Route exact path='/' component={HomeOrRooms} />
             <Route exact path='/signup' component={Signup} />

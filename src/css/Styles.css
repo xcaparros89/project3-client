@@ -11,11 +11,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
 body {
     background-color: #626e7c;
-    background: url(../img/main-game-bg.png);
+    background: url(../img/main-bg.png);
     background-repeat: no-repeat;
     background-position-x: center;
     background-color: #626d7a;
-    margin-top:7vh;
+    margin-top:0;
 }
 
 @media (max-width:1380px){
@@ -56,7 +56,7 @@ body.home {
 }
 
 p {
-    font-family: 'Courier Prime';
+    font-family: 'Courier Prime', Courier, monospace;
     color: #acacac;
 }
 
@@ -76,6 +76,7 @@ p {
     background-color: #4f4f4f;
     border: 2px solid #262626;
     color: #acacac;
+    font-family: 'Courier Prime', Courier, monospace;
 }
 
 .form-control:focus {
@@ -93,20 +94,21 @@ p {
 h1.countdown {
     font-weight: 500;
     font-size: 1.6rem;
-    padding: 5% 0 5% 25%;
+    padding: 6% 0 5% 25%;
     font-family: 'Transformers Movie';
     letter-spacing: 0.1rem;
     color:#000; 
     height: 100%;
     position: absolute;
-    top:17%;
-    left:2%;
+    top:14%;
+    left:3%;
+    text-shadow: 1px 1px 0 #fff;
 }
 
 h1.countdown.red {
     font-weight: 500;
     font-size: 1.6rem;
-    padding: 5% 0 5% 25%;
+    padding: 6% 0 5% 25%;
     font-family: 'Transformers Movie';
     color:#f00;  
 }
@@ -217,11 +219,52 @@ h1 {
     background-size: cover;
 }
 
+.tile-50 {
+    background: url(../img/tiles/TileSep-50.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.finish {
+    background: url(../img/tiles/TileSep-49.png);
+    background-repeat: no-repeat;
+    background-size: cover; 
+}
+
 .new-game {
     margin-top: 20%;
     width:25%;
     cursor: pointer;
 }
+
+p.robot-placeholder-name {
+    font-family:'Transformers Movie';
+    position:absolute;
+    margin-left: 70px;
+    margin-top: 25px;
+    text-shadow: 1px 1px 0 #fff;
+    font-size: 18px;
+}
+
+.newgame-btn {
+    background-size: 100% 100%;
+    background-repeat: no-repeat; 
+    width:130px; /* 107 */
+    height:60px; /* 47*/
+    border:none;
+    background-color: #2f2f2f;
+    margin-bottom:10px;
+    margin-top: 22%;
+}
+
+.newgame-btn:active {
+    filter: grayscale(100%);
+}
+
+.newgame-btn {
+    background-image: url( '../img/btn/btn-new-game.png'); 
+}
+
 
 .rooms-container {
     border-radius:10px;
@@ -308,6 +351,56 @@ h1 {
         border:none;
         background-color: #2f2f2f;
         margin-bottom:15px;
+}
+
+.logoutBtn, .homeBtn, .roomsBtn, .rulesBtn {
+    background-size: 100% 100%;
+    background-repeat: no-repeat; 
+    width:45px; /* 107 */
+    height:45px; /* 47*/
+    border: 2px solid #242636;
+    background-color: #313348;
+    margin-bottom:15px;
+    margin-left:5px;
+}
+
+.logoutBtn:active, .homeBtn:active, .roomsBtn:active,.submitLoginBtn:active, .submitPlayBtn:active, .submitSignupBtn:active, .rulesBtn:active {
+    filter: grayscale(100%);
+}
+
+.logoutBtn {
+    background-image: url( '../img/btn/btn-logout.png'); 
+}
+
+.homeBtn {
+    background-image: url( '../img/btn/btn-home.png');  
+}
+
+.roomsBtn {
+    background-image: url( '../img/btn/btn-rooms.png');   
+}
+
+.rulesBtn{
+    background-image: url( '../img/btn/btn-rules.png');    
+}
+
+.navbar-container {
+    background-image: url( '../img/navbar-bg-pattern.png');
+    background-repeat:repeat-x;
+    background-position-y: bottom;
+}
+
+.navbar-row {
+    width:768px;
+    padding:6px 25px 10px 25px;
+}
+
+.navbar-row-ingame {
+    width:768px;
+    padding: 0px 25px 0px 25px;
+    align-items: baseline;
+    margin-top:12px;
+    margin-bottom:-20px;
 }
 
 @media (max-width:700px) {
