@@ -20,7 +20,7 @@ body {
 
 @media (max-width:1380px){
     body{
-        margin-top:45px;
+        /* margin-top:45px; */
         background: url(../img/bg-pattern.png);
         background-repeat: repeat;
     }
@@ -29,13 +29,13 @@ body {
 
 @media (max-width:900px){
     body{
-        margin-top:30px;
+        /* margin-top:30px; */
     }
 }
 
 @media (max-width:576px){
     body{
-        margin-top:10px;
+        /* margin-top:10px; */
     }
 }
 
@@ -67,7 +67,8 @@ p {
 }
 
 #signup-form {
-    padding:15% 15%;
+    padding-left:15%;
+    padding-right:15%;
     text-align: center;
 }
 
@@ -253,8 +254,19 @@ p.robot-placeholder-name {
     height:60px; /* 47*/
     border:none;
     background-color: #2f2f2f;
+    margin-top:15px;
     margin-bottom:10px;
     margin-top: 22%;
+}
+
+
+@media (max-width: 375px) {
+
+}
+
+
+.newgame-btn {
+
 }
 
 .newgame-btn:active {
@@ -263,17 +275,6 @@ p.robot-placeholder-name {
 
 .newgame-btn {
     background-image: url( '../img/btn/btn-new-game.png'); 
-}
-
-
-.rooms-container {
-    border-radius:10px;
-    max-width:90%;
-    border: 2px solid #202020;
-    background-color: #2f2f2f;
-    margin-right:7%;
-    margin-left:7%;
-    margin-top:3%;
 }
 
 .rooms-container p:first-child {
@@ -292,18 +293,25 @@ p.robot-placeholder-name {
     
 }
 
+.last-p {
+    margin-bottom:0px;
+    padding-bottom:0px;
+}
+
 .container.login-container {
+    margin-top:5%;
     max-width:790px;
     padding: 100px 100px;
     background: url(../img/home-z0-bg.png);
     background-repeat: no-repeat;
-    background-size: 100% 100%;
+    background-size: contain;
+    background-position: center;
 }
 
 .login {
     background: url(../img/home-login-bg.png);
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
+    background-repeat: repeat-y;
+    background-size: contain;
 }
 
 .login-footer {
@@ -319,7 +327,6 @@ p.robot-placeholder-name {
 
 
 .login-text {
-    padding-top:10%;
     padding-left:8%;
     padding-right:8%;
     font-family: 'Courier Prime'
@@ -350,7 +357,7 @@ p.robot-placeholder-name {
         height:60px; /* 47*/
         border:none;
         background-color: #2f2f2f;
-        margin-bottom:15px;
+        margin-bottom:10px;
 }
 
 .logoutBtn, .homeBtn, .roomsBtn, .rulesBtn {
@@ -403,7 +410,7 @@ p.robot-placeholder-name {
     margin-bottom:-20px;
 }
 
-@media (max-width:700px) {
+@media (min-width: 477px) and (max-width:576px) {
     .submitLoginBtn, .submitPlayBtn, .submitSignupBtn {
         width:107px; /* 107 */
         height:47px; /* 47*/ 
