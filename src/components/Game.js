@@ -8,7 +8,7 @@ import {startingBoard, startingDeck, shuffle, orientationToString, findEmptyStar
 import Draggable from 'react-draggable'; 
 
 //const socket = io(process.env.REACT_APP_API_URL, {
-const socket = io("http://localhost:4000", {
+const socket = io("https://robo-race-game.herokuapp.com", {
   transports: ["websocket", "polling"],
 });
 const Game = (props) => {
@@ -21,7 +21,7 @@ const Game = (props) => {
     const robots = ['x', 'y', 'z', 'a', 's', 'd', 'f', 'j']
     const [players, setPlayers] = useState([]);
     const [board, setBoard] = useState([]);
-    const [yourActions, setYourActions] = useState({actions:[['disabled',0, 9],['disabled',0, 9],['disabled',0, 9],['disabled',0, 9],['disabled',0, 9]], handCards:[['disabled',0],['disabled',0],['disabled',0],['disabled',0],['disabled',0],['disabled',0],['disabled',0],['disabled',0]], cardPicked:''})
+    const [yourActions, setYourActions] = useState({actions:[['disabled',0, 9],['disabled',0, 9],['disabled',0, 9],['disabled',0, 9],['disabled',0, 9]], handCards:[['disabled',0, 'disabled'],['disabled',0, 'disabled'],['disabled',0, 'disabled'],['disabled',0, 'disabled'],['disabled',0, 'disabled'],['disabled',0, 'disabled'],['disabled',0,'disabled'],['disabled',0,'disabled']], cardPicked:''})
     const [robotChosen, setRobotChosen] = useState('')
     const [id, setId] = useState('');
     const [disabled, setDisabled] = useState([])
@@ -69,16 +69,14 @@ const Game = (props) => {
           })
 
           socket.on('startCountdown', ()=>{
-            console.log('before disable')
             setCounter(10)
             setDisabled(prevDisabled=>[...prevDisabled, 'endTurn'])
             setTimeout(()=>setDisabled(prevDisabled=>[...prevDisabled, 'clickCard']), 10000);
-            console.log('after disable')
           })
         
           socket.on('finishGame',({winner, newBoard, newPlayers})=>{
-            console.log('the winner is: ', winner)
-            alert('the winner is: ', winner)
+            console.log('winner', winner)
+            alert('the winner is: ' + winner)
           })
 
           socket.on('doActions',({newIPlayer, newIAction, newBoard, newPlayers, isTwo, creator})=>{
@@ -86,15 +84,11 @@ const Game = (props) => {
           })
 
           socket.on('disableRobot',({robot})=>{
-            console.log(robot, 'disabled')
             setRobotsTaken(prev=>[...prev, robot])
-            console.log(robotsTaken, 'robtsTaken')
             if(robotChosen === robot){setRobotChosen('')}
           })
 
           socket.on('enableRobot',({robot})=>{
-            console.log(robot, 'enabled')
-            console.log(robotsTaken, 'robotsTAkeninenambe');
             setRobotsTaken(prev=>{
               let newRobotsTaken = prev.filter(name=>name!==robot);
               return newRobotsTaken
@@ -111,6 +105,7 @@ const Game = (props) => {
     useEffect(()=>{counter > 0 && setTimeout(() => setCounter(counter - 1), 1000)}, [counter])
 
     let handleActions = (iPlayer, iAction, newPlayers, newBoard, isTwo) =>{
+      console.log('handleActions', iPlayer, iAction, 'aqui')
       let newHandle
       const [action, number] = newPlayers[iPlayer].actions[iAction][0]!=='repeat'? newPlayers[iPlayer].actions[iAction] : iAction === 0 || newPlayers[iPlayer].actions[iAction-1][0] ==='repeat' ? ['disabled', 0, 9] : newPlayers[iPlayer].actions[iAction-1];
 
@@ -140,7 +135,8 @@ const Game = (props) => {
         }
 
         newPlayers=newHandle.newPlayers; newBoard=newHandle.newBoard;
-        setTimeout(()=>socket.emit('sendActions', {room:room.id, newIPlayer, newIAction, newPlayers, newBoard , isTwo:newIsTwo}), 500);
+        console.log('finasfsf', newIPlayer, newIAction, 'sfsdfd')
+        setTimeout(()=>socket.emit('sendActions', {room:room.id, newIPlayer, newIAction, newPlayers, newBoard , isTwo:newIsTwo}), 1000);
     }
   }
 
@@ -165,7 +161,7 @@ const Game = (props) => {
         handleBoard[y].splice(x, 1, ' '); 
         handleBoard[startingPos[0]].splice(startingPos[1], 1, player.name);
         handlePlayers.splice(index, 1, {...player, orientation:'up', pos:[startingPos[0],startingPos[1]]});
-      } else if(robots.includes(handleBoard[newY][newX])){ //move into another robot
+      } else if(robotChoice.includes(handleBoard[newY][newX])){ //move into another robot
         let evenNewerY = y=== newY? y : y<newY? newY+1 : newY-1;
         let evenNewerX = x=== newX? x : x<newX? newX+1 : newX-1;
         if(evenNewerY >=0){
@@ -252,48 +248,39 @@ const Game = (props) => {
         setTimeout(()=> socket.emit('endTurn', {room: room.id} ), 10500);
     }
 
-    let clickCard = (fromWhere, iCard) => {
+    let clickCard = (iCard) => {
+      //NO POTS FICAR MÉS DE 5 A ACTIVE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       if(disabled.includes('clickCard')){return};
       let newYou = JSON.parse(JSON.stringify(yourActions));
-      console.log(newYou.cardPicked, 'cardPicked')
-      if(newYou.cardPicked.length){
-        console.log('2nd pick')
-        if(newYou.cardPicked[0] === 'handCards' && fromWhere === 'handCards')
-        {
-          console.log('hxh')
-          newYou = {...newYou, cardPicked:[fromWhere, iCard]}
-        } else{
-          let newActions = newYou.actions;
-          let newHandCards = newYou.handCards;
-          if(newYou.cardPicked[0] === 'actions' && fromWhere === 'actions'){
-            console.log('axa')
-            if(iCard === newYou.cardPicked[1]){
-              console.log(newYou.actions[iCard][2], 'icard2')
-              let newDisabled = disabled.filter(thingy=>thingy !== 'handcard'+newYou.actions[iCard][2]);
-              console.log(newDisabled, 'newDisabled')
-              setDisabled(newDisabled);
-              newActions.splice(iCard, 1, ['disabled', 0, 9]);
-            }else{
-              newActions = newActions.map((action, index)=>{
-                if(index === iCard){return newActions[newYou.cardPicked[1]] }
-                else if(index === newYou.cardPicked[1]){return newActions[iCard]}
-                else {return action}
-              })
-            }
-          } else if(newYou.cardPicked[0] === 'handCards') {
-            setDisabled(prev=>[...prev, 'handcard'+newYou.cardPicked[1]])
-            newActions.splice(iCard, 1, [...newYou[newYou.cardPicked[0]][newYou.cardPicked[1]], newYou.cardPicked[1]]) 
-            console.log(newActions, 'newaxito');
-            console.log(newYou.cardPicked, 'cardpicked')      
+      let newActions = newYou.actions;
+      let newHandCards = newYou.handCards;
+      if(newYou.handCards[iCard][2] === 'disabled'){
+        console.log(newActions, 'newActions')
+        newActions = newActions.map(action=>{
+          console.log(action[2], iCard)
+          return action[2] === iCard ? ['disabled', 0, 9] : action
+        }) 
+        newHandCards = newHandCards.map((card, iHand)=>{
+          return iHand === iCard ? [card[0], card[1], 'active'] : card
+        })
+        console.log(newActions, 'newActons2')
+      } else{
+        console.log('disable dones includes nandcard')
+        if(!newActions.every(action=>action[0] !== 'disabled')){
+          let iAct = 0;
+          while(newActions[iAct][0] !== 'disabled'){
+            iAct++;
           }
-          newYou = {...newYou, actions:newActions, handCards:newHandCards, cardPicked:''}
-          }
-      }else {
-        console.log('no picked')
-        newYou = {...newYou, cardPicked:[fromWhere, iCard]}
+          console.log(newYou.handCards, 'handCards', iCard, 'iCard')
+          newActions.splice(iAct, 1, [newYou.handCards[iCard][0], newYou.handCards[iCard][1], iCard]) 
+          newHandCards = newHandCards.map((card, iHand)=>{
+            return iHand === iCard ? [card[0], card[1], 'disabled'] : card
+          })
+        }
       }
-      socket.emit('addOneAct', {room:room.id, newYou, id:socket.id})
-      setYourActions(newYou)
+        newYou = {...newYou, actions:newActions, handCards:newHandCards}
+        setYourActions(newYou)
+        socket.emit('addOneAct', {room:room.id, newYou, id:socket.id})
     }
   
     let buttonName = (arr,) => {
@@ -331,14 +318,11 @@ const Game = (props) => {
                 <button className='rulesBtn'></button>
               </Link>
               <Link to={"/"} id='home-btn'>
-                <button className='logoutBtn'></button>
+                <button onClick={async()=>props.logout(socket.id, room.id )} className='logoutBtn'></button>
               </Link>
           </div>
         </div>
-
-  {console.log(robotsTaken, 'robotstakenAgain')}
       {/* END CHAT */}
-      {console.log(room.users, players, 'room.users, players')}
       <div className="float-left chat-container">
           <div className="chat" style={{height:'585px'}}>
             <div className="chat-messages" style={{height:'490px', overflow:'hidden', marginBottom:'20px'}}>
@@ -470,9 +454,9 @@ const Game = (props) => {
                     return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/tile-lockers-3.png")} alt="" /></div>)
                   } else if(iRow === 1){
                     return(<div key={iCol} className={`col-1 c${iCol} tile`}> <img className="tile-bg" src={require("../img/tiles/right-border-box.png")} alt="" /></div>)
-                  }else if(iRow === 11 ){
+                  }else if(iRow === 10 ){
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/right-border-regular-no-shadow.png")} alt="" /></div>)
-                } else if(iRow === 10){
+                } else if(iRow === 9){
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/right-border-corner-shadow.png")} alt="" /></div>)
                 } else if(iRow === 2){
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/right-border-corner-shadow.png")} alt="" /></div>) 
@@ -507,20 +491,22 @@ const Game = (props) => {
                       return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/tile-boxes-2.png")} alt="" /></div>)
                 } else if(iRow === 0 && iCol === 10){
                       return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/tile-lockers-6.png")} alt="" /></div>)
-                } else if(iRow === 11 && iCol ===0){
+                } else if(iRow === 10 && iCol ===0){
                       return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/left-border-regular-left-shadow.png")} alt="" /></div>)
-                } else if(iRow === 11 && iCol <9){
+                } else if(iRow === 10 && iCol <9){
                       return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/TileSep-57.png")} alt="" /></div>)
-                } else if(iRow === 11 && iCol === 9 ){
+                } else if(iRow === 10 && iCol === 9 ){
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/TileSep-60.png")} alt="" /></div>)
-                } else if(iRow === 11 && iCol === 10 ){
+                } else if(iRow === 10 && iCol === 10 ){
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/TileSep-59.png")} alt="" /></div>)
                 } else if(robotChoice.includes(col)){
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require(`../img/robot-sprites/${mecoName(col)}.png`)} alt="" /></div>)
-                } else if (iRow === 10 && iCol === 9){
+                } else if (iRow === 9 && iCol === 9){
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/TileSep-56.png")} alt="" /></div>)
-                }else if (iRow === 10 && iCol === 10){
+                }else if (iRow === 9 && iCol === 10){
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/TileSep-57.png")} alt="" /></div>)
+                } else if(iRow === 3 && iCol === 8){
+                  return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/TileSep-56.png")} alt="" /></div>)
                 }
                  else {
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}>{col}</div>)
@@ -554,7 +540,7 @@ const Game = (props) => {
                       <div className="col-2 d-flex align-items-center" style={{paddingLeft:'4%', paddingRight:'1%'}}>
                         {disabled.includes('endTurn')? <img  onClick={()=>endTurn()} className="clock" src={require("../img/gui/robot-controller/clock_disabled.png")} alt="" /> : <img  onClick={()=>endTurn()} className="clock" src={require("../img/gui/robot-controller/clock_active.png")} alt="" />}
                       </div>
-                      <div className="col-2"><img className="tile-bg" src={require("../img/gui/robot-controller/countdown_disabled_screen.png")} alt="" /><h1 class="countdown">{counter>0&&counter+'"'}</h1></div>
+                      <div className="col-2">{counter>0?<img className="tile-bg" src={require("../img/gui/robot-controller/countdown_active_screen.png")} alt="" /> : <img className="tile-bg" src={require("../img/gui/robot-controller/countdown_disabled_screen.png")} alt="" />}<h1 class="countdown">{counter>0&&counter}</h1></div>
                   </div>
                   <div className="row no-gutters" style={{marginBottom: '4%'}}>
                       <div className="col-4">
@@ -562,22 +548,22 @@ const Game = (props) => {
                       </div>
                       <div className="col-8">
                           <div className="row cards-to-play no-gutters">
-                              <div className="col"><img className="tile-bg d-block mx-auto" onClick={()=>clickCard('actions', 0)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[0])}_screen.png`)} alt="" /></div>
-                              <div className="col"><img className="tile-bg d-block mx-auto" onClick={()=>clickCard('actions', 1)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[1])}_screen.png`)} alt="" /></div>
-                              <div className="col"><img className="tile-bg d-block mx-auto" onClick={()=>clickCard('actions', 2)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[2])}_screen.png`)} alt="" /></div>
-                              <div className="col"><img className="tile-bg d-block mx-auto" onClick={()=>clickCard('actions', 3)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[3])}_screen.png`)} alt="" /></div>
-                              <div className="col"><img className="tile-bg d-block mx-auto" onClick={()=>clickCard('actions', 4)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[4])}_screen.png`)} alt="" /></div>
+                              <div className="col"><img className="tile-bg d-block mx-auto" src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[0])}_screen.png`)} alt="" /></div>
+                              <div className="col"><img className="tile-bg d-block mx-auto" src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[1])}_screen.png`)} alt="" /></div>
+                              <div className="col"><img className="tile-bg d-block mx-auto" src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[2])}_screen.png`)} alt="" /></div>
+                              <div className="col"><img className="tile-bg d-block mx-auto" src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[3])}_screen.png`)} alt="" /></div>
+                              <div className="col"><img className="tile-bg d-block mx-auto" src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[4])}_screen.png`)} alt="" /></div>
                           </div>
                       </div>
                   </div>
                   <div class="row  no-gutters">
-                    {robots.map((r, index)=>
-                      disabled.includes('handcard'+index)? (
-                        <div className="col"><img class="tile-bg" src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[index])}_disabled.png`)} alt="" /></div>
+                    {robots.map((r, index)=>{
+                      return yourActions.handCards[index][2]==='disabled'? (
+                        <div className="col"><img class="tile-bg" onClick={()=>clickCard(index)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[index])}_disabled.png`)} alt="" /></div>
                       ) :(
-                        <div className="col"><img class="tile-bg" onClick={()=>clickCard('handCards', index)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[index])}.png`)} alt="" /></div>
+                        <div className="col"><img class="tile-bg" onClick={()=>clickCard(index)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[index])}.png`)} alt="" /></div>
                       )
-                    )}
+                    })}
                   </div>
                       <br/> <br/>
               </div>
