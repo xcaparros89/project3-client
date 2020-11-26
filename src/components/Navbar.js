@@ -16,8 +16,11 @@ class Navbar extends Component {
               <Link to={"/"} id='home-btn'>
                 <button className='homeBtn'></button>
               </Link>
-              <Link to={'/Lobby'} id='lobby-btn'>
+              <Link to={'/'} id='lobby-btn'>
                 <button className='roomsBtn'></button>
+              </Link>
+              <Link to={"/"} id='rules-btn'>
+                <button className='rulesBtn'></button>
               </Link>
               <Link to={"/"} id='home-btn'>
                 <button className='logoutBtn' onClick={logout}></button>
