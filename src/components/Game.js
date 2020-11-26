@@ -8,7 +8,7 @@ import {startingBoard, startingDeck, shuffle, orientationToString, findEmptyStar
 import Draggable from 'react-draggable'; 
 
 //const socket = io(process.env.REACT_APP_API_URL, {
-const socket = io("http://localhost:4000", {
+const socket = io("https://robo-race-game.herokuapp.com", {
   transports: ["websocket", "polling"],
 });
 const Game = (props) => {
@@ -69,15 +69,12 @@ const Game = (props) => {
           })
 
           socket.on('startCountdown', ()=>{
-            console.log('before disable')
             setCounter(10)
             setDisabled(prevDisabled=>[...prevDisabled, 'endTurn'])
             setTimeout(()=>setDisabled(prevDisabled=>[...prevDisabled, 'clickCard']), 10000);
-            console.log('after disable')
           })
         
           socket.on('finishGame',({winner, newBoard, newPlayers})=>{
-            console.log('the winner is: ', winner)
             alert('the winner is: ', winner)
           })
 
@@ -86,15 +83,11 @@ const Game = (props) => {
           })
 
           socket.on('disableRobot',({robot})=>{
-            console.log(robot, 'disabled')
             setRobotsTaken(prev=>[...prev, robot])
-            console.log(robotsTaken, 'robtsTaken')
             if(robotChosen === robot){setRobotChosen('')}
           })
 
           socket.on('enableRobot',({robot})=>{
-            console.log(robot, 'enabled')
-            console.log(robotsTaken, 'robotsTAkeninenambe');
             setRobotsTaken(prev=>{
               let newRobotsTaken = prev.filter(name=>name!==robot);
               return newRobotsTaken
@@ -111,6 +104,7 @@ const Game = (props) => {
     useEffect(()=>{counter > 0 && setTimeout(() => setCounter(counter - 1), 1000)}, [counter])
 
     let handleActions = (iPlayer, iAction, newPlayers, newBoard, isTwo) =>{
+      console.log('handleActions', iPlayer, iAction, 'aqui')
       let newHandle
       const [action, number] = newPlayers[iPlayer].actions[iAction][0]!=='repeat'? newPlayers[iPlayer].actions[iAction] : iAction === 0 || newPlayers[iPlayer].actions[iAction-1][0] ==='repeat' ? ['disabled', 0, 9] : newPlayers[iPlayer].actions[iAction-1];
 
@@ -140,6 +134,7 @@ const Game = (props) => {
         }
 
         newPlayers=newHandle.newPlayers; newBoard=newHandle.newBoard;
+        console.log('finasfsf', newIPlayer, newIAction, 'sfsdfd')
         setTimeout(()=>socket.emit('sendActions', {room:room.id, newIPlayer, newIAction, newPlayers, newBoard , isTwo:newIsTwo}), 500);
     }
   }
@@ -326,10 +321,7 @@ const Game = (props) => {
               </Link>
           </div>
         </div>
-
-  {console.log(robotsTaken, 'robotstakenAgain')}
       {/* END CHAT */}
-      {console.log(room.users, players, 'room.users, players')}
       <div className="float-left chat-container">
           <div className="chat" style={{height:'585px'}}>
             <div className="chat-messages" style={{height:'490px', overflow:'hidden', marginBottom:'20px'}}>
@@ -356,7 +348,6 @@ const Game = (props) => {
               {robots.map((robot, index)=>{
                 return players.length>index ? (
                 <div classname="container"> 
-                  {console.log(players[index], 'playersindex')}
                   <p className="robot-placeholder-name" style={{color:`${roboColor(players[index].name)}`}}>{players[index].username}</p>
                   {
                   creator && !start?
@@ -566,7 +557,6 @@ const Game = (props) => {
                   </div>
                   <div class="row  no-gutters">
                     {robots.map((r, index)=>{
-                    console.log(yourActions.handCards[index], 'youactionshandcardsindex');
                       return yourActions.handCards[index][2]==='disabled'? (
                         <div className="col"><img class="tile-bg" onClick={()=>clickCard(index)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[index])}_disabled.png`)} alt="" /></div>
                       ) :(
