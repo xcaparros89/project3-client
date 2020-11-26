@@ -31,7 +31,6 @@ function Home() {
 					<Link to={"/login"} className="a-login"><button className="submitLoginBtn"></button></Link>
 					<p className="" style={{marginBottom:"0"}}>Don't you have an account?</p>
 					<p className="last-p"><Link to={"/guest"} className="a-login">Play as Guest</Link> or <Link to={"/signup"} className="a-login">Register</Link></p>
-
 				</div>
 				<div className="col-12">
 					<img src={require("../img/home-login-bg-footer.png")} alt="" className="tile-bg"/>
