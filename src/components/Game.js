@@ -77,6 +77,7 @@ const Game = (props) => {
           socket.on('finishGame',({winner, newBoard, newPlayers})=>{
             console.log('winner', winner)
             alert('the winner is: ' + winner)
+            setTimeout(()=>history.push({pathname: `/allRooms`}), 5000); 
           })
 
           socket.on('doActions',({newIPlayer, newIAction, newBoard, newPlayers, isTwo, creator})=>{
@@ -216,11 +217,10 @@ const Game = (props) => {
     }
 
     const changeReady = () => {
-        console.log(robotChosen)
-        if(robotChosen){
-          socket.emit('ready', { user:props.user.username, room:room.id, robotChosen });
-          setReady(!ready);
-        }
+      if(!ready){
+        socket.emit('ready', { user:props.user.username, room:room.id, robotChosen });
+        setReady(true);
+      }
     }
 
     const startGame = () => {
@@ -374,6 +374,8 @@ const Game = (props) => {
               {robotChoice.map(robot=>{
                 return robotsTaken.includes(robot)? 
               (<div className="col-4"><img className="bg-90" src={require(`../img/gui/robot-select-disable-${robot}.png`)} alt="" /></div>  ):
+              robot===robotChosen?
+              (<div className="col-4"><img onClick={()=>setRobotChosen(robot)} className="bg-90" src={require(`../img/gui/robot-select-selected-${robot}.png`)} alt="" /></div>  ):
               (<div className="col-4"><img onClick={()=>setRobotChosen(robot)} className="bg-90" src={require(`../img/gui/robot-select-active-${robot}.png`)} alt="" /></div>  )
             })}
               </div>
@@ -540,7 +542,7 @@ const Game = (props) => {
                       <div className="col-2 d-flex align-items-center" style={{paddingLeft:'4%', paddingRight:'1%'}}>
                         {disabled.includes('endTurn')? <img  onClick={()=>endTurn()} className="clock" src={require("../img/gui/robot-controller/clock_disabled.png")} alt="" /> : <img  onClick={()=>endTurn()} className="clock" src={require("../img/gui/robot-controller/clock_active.png")} alt="" />}
                       </div>
-                      <div className="col-2">{counter>0?<img className="tile-bg" src={require("../img/gui/robot-controller/countdown_active_screen.png")} alt="" /> : <img className="tile-bg" src={require("../img/gui/robot-controller/countdown_disabled_screen.png")} alt="" />}<h1 class="countdown">{counter>0&&counter}</h1></div>
+                      <div className="col-2">{counter>0?<img className="tile-bg" src={require("../img/gui/robot-controller/countdown_active_screen.png")} alt="" /> : <img className="tile-bg" src={require("../img/gui/robot-controller/countdown_disabled_screen.png")} alt="" />}<h1 className="countdown">{counter<1?'' : counter===10?counter:'0'+counter}</h1></div>
                   </div>
                   <div className="row no-gutters" style={{marginBottom: '4%'}}>
                       <div className="col-4">
@@ -556,12 +558,12 @@ const Game = (props) => {
                           </div>
                       </div>
                   </div>
-                  <div class="row  no-gutters">
+                  <div className="row  no-gutters">
                     {robots.map((r, index)=>{
                       return yourActions.handCards[index][2]==='disabled'? (
-                        <div className="col"><img class="tile-bg" onClick={()=>clickCard(index)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[index])}_disabled.png`)} alt="" /></div>
+                        <div className="col"><img className="tile-bg" onClick={()=>clickCard(index)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[index])}_disabled.png`)} alt="" /></div>
                       ) :(
-                        <div className="col"><img class="tile-bg" onClick={()=>clickCard(index)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[index])}.png`)} alt="" /></div>
+                        <div className="col"><img className="tile-bg" onClick={()=>clickCard(index)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[index])}.png`)} alt="" /></div>
                       )
                     })}
                   </div>
@@ -573,35 +575,36 @@ const Game = (props) => {
           {/* END DRAGGABLE DECK */}
           {/* START STATIC DECK */}
           <div className="container deck-bg static-deck-container">
-              <div id="" className="row no-gutters first-row" style={{marginBottom: '4%'}}>
-                  <div className="col-8 d-flex align-items-center"><img className="robot-controller-title" src={require("../img/gui/robot-controller/robot-controller-title.png")}alt="" /></div>
-                  <div className="col-2 d-flex align-items-center" style={{paddingLeft:'4%', paddingRight:'1%'}}><img className="clock" src={require("../img/gui/robot-controller/clock_active.png")}alt="" /></div>
-                  <div className="col-2"><img className="tile-bg" src={require("../img/gui/robot-controller/countdown_disabled_screen.png")}alt="" /><h1 className="countdown">30"</h1></div>
-              </div>
+              <div id="" className="row no-gutters" style={{marginBottom: '4%'}}>
+                      <div className="col-8 d-flex align-items-center"><img className="robot-controller-title" src={require("../img/gui/robot-controller/robot-controller-title.png")} alt="" /></div>
+                      <div className="col-2 d-flex align-items-center" style={{paddingLeft:'4%', paddingRight:'1%'}}>
+                        {disabled.includes('endTurn')? <img  onClick={()=>endTurn()} className="clock" src={require("../img/gui/robot-controller/clock_disabled.png")} alt="" /> : <img  onClick={()=>endTurn()} className="clock" src={require("../img/gui/robot-controller/clock_active.png")} alt="" />}
+                      </div>
+                      <div className="col-2">{counter>0?<img className="tile-bg" src={require("../img/gui/robot-controller/countdown_active_screen.png")} alt="" /> : <img className="tile-bg" src={require("../img/gui/robot-controller/countdown_disabled_screen.png")} alt="" />}<h1 className="countdown">{counter<1?'' : counter===10?counter:'0'+counter}</h1></div>
+                  </div>
               <div className="row no-gutters" style={{marginBottom: '4%'}}>
                   <div className="col-4">
                       <img className="tile-bg" src={require(`../img/gui/robot-controller/robot-placeholder.png`)} alt="Your Robot" />
                   </div>
                   <div className="col-8">
-                      <div className="row cards-to-play no-gutters">
-                          <div className="col"><img className="tile-bg d-block mx-auto" src={require("../img/gui/robot-controller/turn_1_screen.png")}alt="" /></div>
-                          <div className="col"><img className="tile-bg d-block mx-auto" src={require("../img/gui/robot-controller/move_2_screen.png")}alt="" /></div>
-                          <div className="col"><img className="tile-bg d-block mx-auto" src={require("../img/gui//robot-controller/turn_-1_screen.png")}alt="" /></div>
-                          <div className="col"><img className="tile-bg d-block mx-auto" src={require("../img/gui/robot-controller/move_-1_screen.png")}alt="" /></div>
-                          <div className="col"><img className="tile-bg d-block mx-auto" src={require("../img/gui/robot-controller/repeat_x_screen.png")}alt="" /></div>
+                          <div className="row cards-to-play no-gutters">
+                              <div className="col"><img className="tile-bg d-block mx-auto" src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[0])}_screen.png`)} alt="" /></div>
+                              <div className="col"><img className="tile-bg d-block mx-auto" src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[1])}_screen.png`)} alt="" /></div>
+                              <div className="col"><img className="tile-bg d-block mx-auto" src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[2])}_screen.png`)} alt="" /></div>
+                              <div className="col"><img className="tile-bg d-block mx-auto" src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[3])}_screen.png`)} alt="" /></div>
+                              <div className="col"><img className="tile-bg d-block mx-auto" src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[4])}_screen.png`)} alt="" /></div>
+                          </div>
                       </div>
                   </div>
-              </div>
-              <div className="row  no-gutters">
-                  <div className="col"><img className="tile-bg" src={require("../img/gui/robot-controller/move_1.png")}alt="" /></div>
-                  <div className="col"><img className="tile-bg" src={require("../img/gui/robot-controller/move_2_disabled.png")}alt="" /></div>
-                  <div className="col"><img className="tile-bg" src={require("../img/gui/robot-controller/turn_1_disabled.png")}alt="" /></div>
-                  <div className="col"><img className="tile-bg" src={require("../img/gui/robot-controller/turn_-1_disabled.png")}alt="" /></div>
-                  <div className="col"><img className="tile-bg" src={require("../img/gui/robot-controller/turn_2.png")}alt="" /></div>
-                  <div className="col"><img className="tile-bg" src={require("../img/gui/robot-controller/repeat_x_disabled.png")}alt="" /></div>
-                  <div className="col"><img className="tile-bg" src={require("../img/gui/robot-controller/move_-1_disabled.png")}alt="" /></div>
-                  <div className="col"><img className="tile-bg" src={require("../img/gui/robot-controller/move_1.png")}alt="" /></div>
-              </div>
+                  <div className="row  no-gutters">
+                    {robots.map((r, index)=>{
+                      return yourActions.handCards[index][2]==='disabled'? (
+                        <div className="col"><img className="tile-bg" onClick={()=>clickCard(index)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[index])}_disabled.png`)} alt="" /></div>
+                      ) :(
+                        <div className="col"><img className="tile-bg" onClick={()=>clickCard(index)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[index])}.png`)} alt="" /></div>
+                      )
+                    })}
+                  </div>
                   <hr/>
           </div>
           {/* END STATIC DECK */}
