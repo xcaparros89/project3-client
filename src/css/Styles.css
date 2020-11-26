@@ -277,17 +277,6 @@ p.robot-placeholder-name {
     background-image: url( '../img/btn/btn-new-game.png'); 
 }
 
-
-.rooms-container {
-    border-radius:10px;
-    max-width:90%;
-    border: 2px solid #202020;
-    background-color: #2f2f2f;
-    margin-right:7%;
-    margin-left:7%;
-    margin-top:3%;
-}
-
 .rooms-container p:first-child {
     padding-top: 5%;
     text-align: center;
@@ -310,6 +299,7 @@ p.robot-placeholder-name {
 }
 
 .container.login-container {
+    margin-top:5%;
     max-width:790px;
     padding: 100px 100px;
     background: url(../img/home-z0-bg.png);

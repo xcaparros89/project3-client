@@ -29,7 +29,7 @@ class Signup extends Component {
     const { username, password } = this.state;
     return (
       <> {this.props.isLoggedin && <Redirect to='/allRooms' />}
-    <div className="container login-container d-flex align-items-center" style={{marginTop:'5%'}}>
+    <div className="container login-container d-flex align-items-center">
         <div className="container home-bg">
             <div className="row no-gutters">
                 <div className="col-12">
