@@ -231,6 +231,14 @@ h1 {
     cursor: pointer;
 }
 
+p.robot-placeholder-name {
+    font-family:'Transformers Movie';
+    position:absolute;
+    margin-left: 75px;
+    margin-top: 25px;
+    text-shadow: 1px 1px 0 #fff;
+}
+
 .newgame-btn {
     background-size: 100% 100%;
     background-repeat: no-repeat; 

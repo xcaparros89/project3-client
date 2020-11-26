@@ -351,7 +351,7 @@ const Game = (props) => {
                   <img onClick={()=>kickOut(room.users[index])} className="" src={require(`../img/gui/robot-screen-${players[index].name}.png`)}alt="" /> :
                   <img className="" src={require(`../img/gui/robot-screen-${players[index].name}.png`)}alt="" />
                   }
-                  <p style={{color:`${roboColor(players[index].name)}`}}>{players[index].username}</p>
+                  <p className="robot-placeholder-name"style={{color:`${roboColor(players[index].name)}`}}>{players[index].username}</p>
                 </>
               ) : creator && !start?
                 (<img onClick={()=>addBot(index)} className="" src={require(`../img/gui/robot-screen-placeholder.png`)}alt="" /> ):(
@@ -407,29 +407,29 @@ const Game = (props) => {
         </div>
         <div className="row no-gutters">
             <div className="col-1 c0 tile"><img className="tile-bg" src={require("../img/tiles/top-wall-left.png")} alt="" /></div>
-            <div className="col-1 c1 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-38.png")} alt="" /></div>
+            <div className="col-1 c1 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-44-danger.png")} alt="" /></div>
             <div className="col-1 c2 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-38.png")} alt="" /></div>
-            <div className="col-1 c3 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-38.png")} alt="" /></div>
+            <div className="col-1 c3 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-40.png")} alt="" /></div>
             <div className="col-1 c4 tile"><img className="tile-bg" src={require("../img/tiles/door-1.png")} alt="" /></div>
             <div className="col-1 c5 tile"><img className="tile-bg" src={require("../img/tiles/door-2.png")} alt="" /></div>
             <div className="col-1 c6 tile"><img className="tile-bg" src={require("../img/tiles/door-3.png")} alt="" /></div>
-            <div className="col-1 c7 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-38.png")} alt="" /></div>
-            <div className="col-1 c8 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-38.png")} alt="" /></div>
-            <div className="col-1 c9 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-38.png")} alt="" /></div>
+            <div className="col-1 c7 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-40.png")} alt="" /></div>
+            <div className="col-1 c8 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-42-plug.png")} alt="" /></div>
+            <div className="col-1 c9 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-44.png")} alt="" /></div>
             <div className="col-1 c10 tile"><img className="tile-bg" src={require("../img/tiles/tile-lockers-4.png")} alt="" /></div>
             <div className="col-1 c11"><img className="tile-bg" src={require("../img/tiles/tile-lockers-1.png")} alt="" /></div>
         </div>
         <div className="row no-gutters">
             <div className="col-1 c0 tile"><img className="tile-bg" src={require("../img/tiles/left-wall-box.png")} alt="" /></div>
             <div className="col-1 c1 tile"><img className="tile-bg" src={require("../img/tiles/left-wall-box-2.png")} alt="" /></div>
-            <div className="col-1 c2 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-39.png")} alt="" /></div>
-            <div className="col-1 c3 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-39.png")} alt="" /></div>
+            <div className="col-1 c2 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-43.png")} alt="" /></div>
+            <div className="col-1 c3 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-41.png")} alt="" /></div>
             <div className="col-1 c4 tile"><img className="tile-bg" src={require("../img/tiles/door-4.png")} alt="" /></div>
             <div className="col-1 c5 tile"><img className="tile-bg" src={require("../img/tiles/door-5.png")} alt="" /></div>
             <div className="col-1 c6 tile"><img className="tile-bg" src={require("../img/tiles/door-6.png")} alt="" /></div>
-            <div className="col-1 c7 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-39.png")} alt="" /></div>
-            <div className="col-1 c8 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-39.png")} alt="" /></div>
-            <div className="col-1 c9 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-39.png")} alt="" /></div>
+            <div className="col-1 c7 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-41.png")} alt="" /></div>
+            <div className="col-1 c8 tile"><img className="tile-bg" src={require("../img/tiles/computer-top.png")} alt="" /></div>
+            <div className="col-1 c9 tile"><img className="tile-bg" src={require("../img/tiles/TileSep-45.png")} alt="" /></div>
             <div className="col-1 c10 tile"><img className="tile-bg" src={require("../img/tiles/tile-lockers-5.png")} alt="" /></div>
             <div className="col-1 c11"><img className="tile-bg" src={require("../img/tiles/tile-lockers-2.png")} alt="" /></div>
         </div>
@@ -513,7 +513,7 @@ const Game = (props) => {
                   </div>
                   <div className="row no-gutters" style={{marginBottom: '4%'}}>
                       <div className="col-4">
-                          <img className="tile-bg" src="./img/gui/robot-controller/robot-placeholder.png" alt="" />
+                          <img className="tile-bg" src="../img/gui/robot-controller/robot-placeholder.png" alt="" />
                       </div>
                       <div className="col-8">
                           <div className="row cards-to-play no-gutters">
@@ -549,7 +549,7 @@ const Game = (props) => {
               </div>
               <div className="row no-gutters" style={{marginBottom: '4%'}}>
                   <div className="col-4">
-                      <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
+                      <img className="tile-bg" src={require(`../img/gui/robot-controller/robot-placeholder.png`)} alt="Your Robot" />
                   </div>
                   <div className="col-8">
                       <div className="row cards-to-play no-gutters">
