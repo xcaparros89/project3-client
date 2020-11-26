@@ -356,8 +356,7 @@ const Game = (props) => {
               ) : creator && !start?
                 (<img onClick={()=>addBot(index)} className="" src={require(`../img/gui/robot-screen-placeholder.png`)}alt="" /> ):(
                 <img className="" src={require(`../img/gui/robot-screen-placeholder.png`)}alt="" />)
-              })}             
-
+              })}
           </div>
       </div>
       {/* END PLAYERS */}
