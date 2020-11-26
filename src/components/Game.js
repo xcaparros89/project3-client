@@ -75,7 +75,8 @@ const Game = (props) => {
           })
         
           socket.on('finishGame',({winner, newBoard, newPlayers})=>{
-            alert('the winner is: ', winner)
+            console.log('winner', winner)
+            alert('the winner is: ' + winner)
           })
 
           socket.on('doActions',({newIPlayer, newIAction, newBoard, newPlayers, isTwo, creator})=>{
@@ -135,7 +136,7 @@ const Game = (props) => {
 
         newPlayers=newHandle.newPlayers; newBoard=newHandle.newBoard;
         console.log('finasfsf', newIPlayer, newIAction, 'sfsdfd')
-        setTimeout(()=>socket.emit('sendActions', {room:room.id, newIPlayer, newIAction, newPlayers, newBoard , isTwo:newIsTwo}), 500);
+        setTimeout(()=>socket.emit('sendActions', {room:room.id, newIPlayer, newIAction, newPlayers, newBoard , isTwo:newIsTwo}), 1000);
     }
   }
 
@@ -317,7 +318,7 @@ const Game = (props) => {
                 <button className='rulesBtn'></button>
               </Link>
               <Link to={"/"} id='home-btn'>
-                <button className='logoutBtn'></button>
+                <button onClick={async()=>props.logout(socket.id, room.id )} className='logoutBtn'></button>
               </Link>
           </div>
         </div>
