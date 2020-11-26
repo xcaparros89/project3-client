@@ -21,7 +21,7 @@ const Game = (props) => {
     const robots = ['x', 'y', 'z', 'a', 's', 'd', 'f', 'j']
     const [players, setPlayers] = useState([]);
     const [board, setBoard] = useState([]);
-    const [yourActions, setYourActions] = useState({actions:[['disabled',0, 9],['disabled',0, 9],['disabled',0, 9],['disabled',0, 9],['disabled',0, 9]], handCards:[['disabled',0],['disabled',0],['disabled',0],['disabled',0],['disabled',0],['disabled',0],['disabled',0],['disabled',0]], cardPicked:''})
+    const [yourActions, setYourActions] = useState({actions:[['disabled',0, 9],['disabled',0, 9],['disabled',0, 9],['disabled',0, 9],['disabled',0, 9]], handCards:[['disabled',0, 'disabled'],['disabled',0, 'disabled'],['disabled',0, 'disabled'],['disabled',0, 'disabled'],['disabled',0, 'disabled'],['disabled',0, 'disabled'],['disabled',0,'disabled'],['disabled',0,'disabled']], cardPicked:''})
     const [robotChosen, setRobotChosen] = useState('')
     const [id, setId] = useState('');
     const [disabled, setDisabled] = useState([])
@@ -165,7 +165,7 @@ const Game = (props) => {
         handleBoard[y].splice(x, 1, ' '); 
         handleBoard[startingPos[0]].splice(startingPos[1], 1, player.name);
         handlePlayers.splice(index, 1, {...player, orientation:'up', pos:[startingPos[0],startingPos[1]]});
-      } else if(robots.includes(handleBoard[newY][newX])){ //move into another robot
+      } else if(robotChoice.includes(handleBoard[newY][newX])){ //move into another robot
         let evenNewerY = y=== newY? y : y<newY? newY+1 : newY-1;
         let evenNewerX = x=== newX? x : x<newX? newX+1 : newX-1;
         if(evenNewerY >=0){
@@ -252,48 +252,39 @@ const Game = (props) => {
         setTimeout(()=> socket.emit('endTurn', {room: room.id} ), 10500);
     }
 
-    let clickCard = (fromWhere, iCard) => {
+    let clickCard = (iCard) => {
+      //NO POTS FICAR MÉS DE 5 A ACTIVE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
       if(disabled.includes('clickCard')){return};
       let newYou = JSON.parse(JSON.stringify(yourActions));
-      console.log(newYou.cardPicked, 'cardPicked')
-      if(newYou.cardPicked.length){
-        console.log('2nd pick')
-        if(newYou.cardPicked[0] === 'handCards' && fromWhere === 'handCards')
-        {
-          console.log('hxh')
-          newYou = {...newYou, cardPicked:[fromWhere, iCard]}
-        } else{
-          let newActions = newYou.actions;
-          let newHandCards = newYou.handCards;
-          if(newYou.cardPicked[0] === 'actions' && fromWhere === 'actions'){
-            console.log('axa')
-            if(iCard === newYou.cardPicked[1]){
-              console.log(newYou.actions[iCard][2], 'icard2')
-              let newDisabled = disabled.filter(thingy=>thingy !== 'handcard'+newYou.actions[iCard][2]);
-              console.log(newDisabled, 'newDisabled')
-              setDisabled(newDisabled);
-              newActions.splice(iCard, 1, ['disabled', 0, 9]);
-            }else{
-              newActions = newActions.map((action, index)=>{
-                if(index === iCard){return newActions[newYou.cardPicked[1]] }
-                else if(index === newYou.cardPicked[1]){return newActions[iCard]}
-                else {return action}
-              })
-            }
-          } else if(newYou.cardPicked[0] === 'handCards') {
-            setDisabled(prev=>[...prev, 'handcard'+newYou.cardPicked[1]])
-            newActions.splice(iCard, 1, [...newYou[newYou.cardPicked[0]][newYou.cardPicked[1]], newYou.cardPicked[1]]) 
-            console.log(newActions, 'newaxito');
-            console.log(newYou.cardPicked, 'cardpicked')      
+      let newActions = newYou.actions;
+      let newHandCards = newYou.handCards;
+      if(newYou.handCards[iCard][2] === 'disabled'){
+        console.log(newActions, 'newActions')
+        newActions = newActions.map(action=>{
+          console.log(action[2], iCard)
+          return action[2] === iCard ? ['disabled', 0, 9] : action
+        }) 
+        newHandCards = newHandCards.map((card, iHand)=>{
+          return iHand === iCard ? [card[0], card[1], 'active'] : card
+        })
+        console.log(newActions, 'newActons2')
+      } else{
+        console.log('disable dones includes nandcard')
+        if(!newActions.every(action=>action[0] !== 'disabled')){
+          let iAct = 0;
+          while(newActions[iAct][0] !== 'disabled'){
+            iAct++;
           }
-          newYou = {...newYou, actions:newActions, handCards:newHandCards, cardPicked:''}
-          }
-      }else {
-        console.log('no picked')
-        newYou = {...newYou, cardPicked:[fromWhere, iCard]}
+          console.log(newYou.handCards, 'handCards', iCard, 'iCard')
+          newActions.splice(iAct, 1, [newYou.handCards[iCard][0], newYou.handCards[iCard][1], iCard]) 
+          newHandCards = newHandCards.map((card, iHand)=>{
+            return iHand === iCard ? [card[0], card[1], 'disabled'] : card
+          })
+        }
       }
-      socket.emit('addOneAct', {room:room.id, newYou, id:socket.id})
-      setYourActions(newYou)
+        newYou = {...newYou, actions:newActions, handCards:newHandCards}
+        setYourActions(newYou)
+        socket.emit('addOneAct', {room:room.id, newYou, id:socket.id})
     }
   
     let buttonName = (arr,) => {
@@ -510,7 +501,7 @@ const Game = (props) => {
                       <div className="col-2 d-flex align-items-center" style={{paddingLeft:'4%', paddingRight:'1%'}}>
                         {disabled.includes('endTurn')? <img  onClick={()=>endTurn()} className="clock" src={require("../img/gui/robot-controller/clock_disabled.png")} alt="" /> : <img  onClick={()=>endTurn()} className="clock" src={require("../img/gui/robot-controller/clock_active.png")} alt="" />}
                       </div>
-                      <div className="col-2"><img className="tile-bg" src={require("../img/gui/robot-controller/countdown_disabled_screen.png")} alt="" /><h1 class="countdown">{counter>0&&counter+'"'}</h1></div>
+                      <div className="col-2">{counter>0?<img className="tile-bg" src={require("../img/gui/robot-controller/countdown_active_screen.png")} alt="" /> : <img className="tile-bg" src={require("../img/gui/robot-controller/countdown_disabled_screen.png")} alt="" />}<h1 class="countdown">{counter>0&&counter}</h1></div>
                   </div>
                   <div className="row no-gutters" style={{marginBottom: '4%'}}>
                       <div className="col-4">
@@ -518,22 +509,23 @@ const Game = (props) => {
                       </div>
                       <div className="col-8">
                           <div className="row cards-to-play no-gutters">
-                              <div className="col"><img className="tile-bg d-block mx-auto" onClick={()=>clickCard('actions', 0)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[0])}_screen.png`)} alt="" /></div>
-                              <div className="col"><img className="tile-bg d-block mx-auto" onClick={()=>clickCard('actions', 1)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[1])}_screen.png`)} alt="" /></div>
-                              <div className="col"><img className="tile-bg d-block mx-auto" onClick={()=>clickCard('actions', 2)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[2])}_screen.png`)} alt="" /></div>
-                              <div className="col"><img className="tile-bg d-block mx-auto" onClick={()=>clickCard('actions', 3)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[3])}_screen.png`)} alt="" /></div>
-                              <div className="col"><img className="tile-bg d-block mx-auto" onClick={()=>clickCard('actions', 4)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[4])}_screen.png`)} alt="" /></div>
+                              <div className="col"><img className="tile-bg d-block mx-auto" src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[0])}_screen.png`)} alt="" /></div>
+                              <div className="col"><img className="tile-bg d-block mx-auto" src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[1])}_screen.png`)} alt="" /></div>
+                              <div className="col"><img className="tile-bg d-block mx-auto" src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[2])}_screen.png`)} alt="" /></div>
+                              <div className="col"><img className="tile-bg d-block mx-auto" src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[3])}_screen.png`)} alt="" /></div>
+                              <div className="col"><img className="tile-bg d-block mx-auto" src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[4])}_screen.png`)} alt="" /></div>
                           </div>
                       </div>
                   </div>
                   <div class="row  no-gutters">
-                    {robots.map((r, index)=>
-                      disabled.includes('handcard'+index)? (
-                        <div className="col"><img class="tile-bg" src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[index])}_disabled.png`)} alt="" /></div>
+                    {robots.map((r, index)=>{
+                    console.log(yourActions.handCards[index], 'youactionshandcardsindex');
+                      return yourActions.handCards[index][2]==='disabled'? (
+                        <div className="col"><img class="tile-bg" onClick={()=>clickCard(index)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[index])}_disabled.png`)} alt="" /></div>
                       ) :(
-                        <div className="col"><img class="tile-bg" onClick={()=>clickCard('handCards', index)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[index])}.png`)} alt="" /></div>
+                        <div className="col"><img class="tile-bg" onClick={()=>clickCard(index)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[index])}.png`)} alt="" /></div>
                       )
-                    )}
+                    })}
                   </div>
                       <br/> <br/>
               </div>
