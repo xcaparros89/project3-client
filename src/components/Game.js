@@ -356,6 +356,7 @@ const Game = (props) => {
               {robots.map((robot, index)=>{
                 return players.length>index ? (
                 <div classname="container"> 
+                  {console.log(players[index], 'playersindex')}
                   <p className="robot-placeholder-name" style={{color:`${roboColor(players[index].name)}`}}>{players[index].username}</p>
                   {
                   creator && !start?
@@ -461,9 +462,9 @@ const Game = (props) => {
                     return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/tile-lockers-3.png")} alt="" /></div>)
                   } else if(iRow === 1){
                     return(<div key={iCol} className={`col-1 c${iCol} tile`}> <img className="tile-bg" src={require("../img/tiles/right-border-box.png")} alt="" /></div>)
-                  }else if(iRow === 11 ){
+                  }else if(iRow === 10 ){
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/right-border-regular-no-shadow.png")} alt="" /></div>)
-                } else if(iRow === 10){
+                } else if(iRow === 9){
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/right-border-corner-shadow.png")} alt="" /></div>)
                 } else if(iRow === 2){
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/right-border-corner-shadow.png")} alt="" /></div>) 
@@ -498,19 +499,19 @@ const Game = (props) => {
                       return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/tile-boxes-2.png")} alt="" /></div>)
                 } else if(iRow === 0 && iCol === 10){
                       return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/tile-lockers-6.png")} alt="" /></div>)
-                } else if(iRow === 11 && iCol ===0){
+                } else if(iRow === 10 && iCol ===0){
                       return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/left-border-regular-left-shadow.png")} alt="" /></div>)
-                } else if(iRow === 11 && iCol <9){
+                } else if(iRow === 10 && iCol <9){
                       return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/TileSep-57.png")} alt="" /></div>)
-                } else if(iRow === 11 && iCol === 9 ){
+                } else if(iRow === 10 && iCol === 9 ){
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/TileSep-60.png")} alt="" /></div>)
-                } else if(iRow === 11 && iCol === 10 ){
+                } else if(iRow === 10 && iCol === 10 ){
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/TileSep-59.png")} alt="" /></div>)
                 } else if(robotChoice.includes(col)){
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require(`../img/robot-sprites/${mecoName(col)}.png`)} alt="" /></div>)
-                } else if (iRow === 10 && iCol === 9){
+                } else if (iRow === 9 && iCol === 9){
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/TileSep-56.png")} alt="" /></div>)
-                }else if (iRow === 10 && iCol === 10){
+                }else if (iRow === 9 && iCol === 10){
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/TileSep-57.png")} alt="" /></div>)
                 }
                  else {
