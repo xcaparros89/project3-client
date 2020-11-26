@@ -513,6 +513,8 @@ const Game = (props) => {
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/TileSep-56.png")} alt="" /></div>)
                 }else if (iRow === 9 && iCol === 10){
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/TileSep-57.png")} alt="" /></div>)
+                } else if(iRow === 3 && iCol === 8){
+                  return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/TileSep-56.png")} alt="" /></div>)
                 }
                  else {
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}>{col}</div>)
