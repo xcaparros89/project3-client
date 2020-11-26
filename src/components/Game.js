@@ -477,8 +477,6 @@ const Game = (props) => {
                 } else if(iRow === 2){
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/right-border-corner-shadow.png")} alt="" /></div>) 
                 }
-
-
                 else {
                     return(<div key={iCol} className={`col-1 c${iCol} tile`}> <img className="tile-bg" src={require("../img/tiles/right-border-regular-shadow.png")} alt="" /></div>)
                   }
@@ -505,11 +503,7 @@ const Game = (props) => {
                   return(<div key={iCol} className={`col-1 c${iCol} tile`}> <img className="tile-bg" src={require("../img/tiles/fence-4.png")} alt="" /></div>)
                 } else if(iRow === 6 && iCol === 1){
                   return(<div key={iCol} className={`col-1 c${iCol} tile`}> <img className="tile-bg" src={require("../img/tiles/TileSep-57.png")} alt="" /></div>)
-                }    
-                
-                
-                
-                else if(iRow === 0 && iCol === 1){
+                } else if(iRow === 0 && iCol === 1){
                       return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/tile-boxes-2.png")} alt="" /></div>)
                 } else if(iRow === 0 && iCol === 10){
                       return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/tile-lockers-6.png")} alt="" /></div>)
