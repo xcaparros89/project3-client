@@ -12,7 +12,7 @@ const socket = io("http://localhost:4000", {
   transports: ["websocket", "polling"],
 });
 const Game = (props) => {
-  const robotChoice= ['x', 'y', 'z', 'a', 's', 'd', 'f', 'j','1','2','3','4'];
+  const robotChoice= ['cam', 'cve', 'cvi', 'ham', 'hve', 'hvi', 'qam', 'qve', 'qvi', 'tam', 'tve', 'tvi'];
   const history = useHistory();
     const [room, setRoom] = useState({name:props.user.username, id:props.match.params.id, users:[], messages:[]})
     const [ready, setReady] = useState(false);
@@ -21,16 +21,17 @@ const Game = (props) => {
     const robots = ['x', 'y', 'z', 'a', 's', 'd', 'f', 'j']
     const [players, setPlayers] = useState([]);
     const [board, setBoard] = useState([]);
-    const [yourActions, setYourActions] = useState({actions:[['disabled',0],['disabled',0],['disabled',0],['disabled',0],['disabled',0]], handCards:[['disabled',0],['disabled',0],['disabled',0],['disabled',0],['disabled',0],['disabled',0],['disabled',0],['disabled',0]], cardPicked:''})
+    const [yourActions, setYourActions] = useState({actions:[['disabled',0, 9],['disabled',0, 9],['disabled',0, 9],['disabled',0, 9],['disabled',0, 9]], handCards:[['disabled',0],['disabled',0],['disabled',0],['disabled',0],['disabled',0],['disabled',0],['disabled',0],['disabled',0]], cardPicked:''})
     const [robotChosen, setRobotChosen] = useState('')
     const [id, setId] = useState('');
     const [disabled, setDisabled] = useState([])
     const [counter, setCounter] = useState(0);
+    const [robotsTaken, setRobotsTaken] = useState([])
 
     useEffect(() => {
         if(props.history.location.state){ setCreator(props.history.location.state.creator)};
         socket.emit("join", { username: props.user.username, room: props.match.params.id});
-        socket.on('roomUsers', ({users, username, id}) =>{setRoom(prevRoom=>({...prevRoom, users})); if(id && username === props.user.username)setId(id)});
+        socket.on('roomUsers', ({users, username, id}) =>{setRoom(prevRoom=>({...prevRoom, users})); setPlayers(users); if(id && username === props.user.username)setId(id)});
         socket.on('message',message=>{
             setRoom(prevState=>({...prevState, messages:[...prevState.messages, message]}))
             //Scroll down
@@ -84,6 +85,23 @@ const Game = (props) => {
             handleActions(newIPlayer, newIAction, newPlayers, newBoard, isTwo, creator)
           })
 
+          socket.on('disableRobot',({robot})=>{
+            console.log(robot, 'disabled')
+            setRobotsTaken(prev=>[...prev, robot])
+            console.log(robotsTaken, 'robtsTaken')
+            if(robotChosen === robot){setRobotChosen('')}
+          })
+
+          socket.on('enableRobot',({robot})=>{
+            console.log(robot, 'enabled')
+            console.log(robotsTaken, 'robotsTAkeninenambe');
+            setRobotsTaken(prev=>{
+              let newRobotsTaken = prev.filter(name=>name!==robot);
+              return newRobotsTaken
+            })
+          })
+          
+
           document.body.classList.remove('home');
         return () => {
             socket.close();
@@ -94,7 +112,7 @@ const Game = (props) => {
 
     let handleActions = (iPlayer, iAction, newPlayers, newBoard, isTwo) =>{
       let newHandle
-      const [action, number] = newPlayers[iPlayer].actions[iAction][0]!=='repeat'? newPlayers[iPlayer].actions[iAction] : iAction === 0 || newPlayers[iPlayer].actions[iAction-1][0] ==='repeat' ? ['disabled', 0] : newPlayers[iPlayer].actions[iAction-1];
+      const [action, number] = newPlayers[iPlayer].actions[iAction][0]!=='repeat'? newPlayers[iPlayer].actions[iAction] : iAction === 0 || newPlayers[iPlayer].actions[iAction-1][0] ==='repeat' ? ['disabled', 0, 9] : newPlayers[iPlayer].actions[iAction-1];
 
       if(action === 'move'){
         newHandle = handleMove(number, iPlayer, newPlayers, newBoard)
@@ -202,8 +220,11 @@ const Game = (props) => {
     }
 
     const changeReady = () => {
-        socket.emit('ready', { user:props.user.username, room:room.id, robotChosen });
-        setReady(!ready);
+        console.log(robotChosen)
+        if(robotChosen){
+          socket.emit('ready', { user:props.user.username, room:room.id, robotChosen });
+          setReady(!ready);
+        }
     }
 
     const startGame = () => {
@@ -234,46 +255,72 @@ const Game = (props) => {
     let clickCard = (fromWhere, iCard) => {
       if(disabled.includes('clickCard')){return};
       let newYou = JSON.parse(JSON.stringify(yourActions));
+      console.log(newYou.cardPicked, 'cardPicked')
       if(newYou.cardPicked.length){
+        console.log('2nd pick')
         if(newYou.cardPicked[0] === 'handCards' && fromWhere === 'handCards')
         {
+          console.log('hxh')
           newYou = {...newYou, cardPicked:[fromWhere, iCard]}
         } else{
           let newActions = newYou.actions;
           let newHandCards = newYou.handCards;
           if(newYou.cardPicked[0] === 'actions' && fromWhere === 'actions'){
-            newActions = newActions.map((action, index)=>{
-              if(index === iCard){return newActions[newYou.cardPicked[1]] }
-              else if(index === newYou.cardPicked[1]){return newActions[iCard]}
-              else {return action}
-            })
-          } else if(newYou.cardPicked[0] === 'handCards'){
-            newHandCards = newHandCards.map((card, index)=>index===newYou.cardPicked[1]?newYou[fromWhere][iCard] : card);
-            newActions.splice(iCard, 1, newYou[newYou.cardPicked[0]][newYou.cardPicked[1]])
-          } else{    
-            newHandCards = newHandCards.map((card, index)=>index===iCard? newYou[newYou.cardPicked[0]][newYou.cardPicked[1]] : card);      
-            newActions.splice(newYou.cardPicked[1], 1, newYou[fromWhere][iCard])
+            console.log('axa')
+            if(iCard === newYou.cardPicked[1]){
+              console.log(newYou.actions[iCard][2], 'icard2')
+              let newDisabled = disabled.filter(thingy=>thingy !== 'handcard'+newYou.actions[iCard][2]);
+              console.log(newDisabled, 'newDisabled')
+              setDisabled(newDisabled);
+              newActions.splice(iCard, 1, ['disabled', 0, 9]);
+            }else{
+              newActions = newActions.map((action, index)=>{
+                if(index === iCard){return newActions[newYou.cardPicked[1]] }
+                else if(index === newYou.cardPicked[1]){return newActions[iCard]}
+                else {return action}
+              })
+            }
+          } else if(newYou.cardPicked[0] === 'handCards') {
+            setDisabled(prev=>[...prev, 'handcard'+newYou.cardPicked[1]])
+            newActions.splice(iCard, 1, [...newYou[newYou.cardPicked[0]][newYou.cardPicked[1]], newYou.cardPicked[1]]) 
+            console.log(newActions, 'newaxito');
+            console.log(newYou.cardPicked, 'cardpicked')      
           }
           newYou = {...newYou, actions:newActions, handCards:newHandCards, cardPicked:''}
           }
       }else {
+        console.log('no picked')
         newYou = {...newYou, cardPicked:[fromWhere, iCard]}
       }
       socket.emit('addOneAct', {room:room.id, newYou, id:socket.id})
       setYourActions(newYou)
     }
   
-    let buttonName = (arr) => {
+    let buttonName = (arr,) => {
       if(arr[0] ==='disabled'){
         return arr[0];
       }else {
-        return arr.join('_')
+        return arr[0] + '_' + arr[1]
       }
     }
 
+    let mecoName = (name) =>{
+      console.log(players)
+      let player =  players.filter(player=>player.name === name)
+      return name+'_'+player[0].orientation
+    }
+
+    let roboColor = (name) =>{
+      if(name[2] === 'm'){return 'yellow'
+    } else if(name[2] === 'e'){return 'green'
+    } else if(name[2] === 'i'){return 'red'
+    } else {return 'black'}
+  }
   return (
   <div className="container container-body">
+  {console.log(robotsTaken, 'robotstakenAgain')}
       {/* END CHAT */}
+      {console.log(room.users, players, 'room.users, players')}
       <div className="float-left chat-container">
           <div className="chat" style={{height:'585px'}}>
             <div className="chat-messages" style={{height:'490px', overflow:'hidden', marginBottom:'20px'}}>
@@ -297,14 +344,20 @@ const Game = (props) => {
       {/*  START PLAYERS */}
       <div className="float-right robots-container">
           <div className="robots">
-              <img className="" src={require("../img/gui/robot-screen-qVe.png")}alt="" />
-              <img className="" src={require("../img/gui/robot-screen-cAm.png")}alt="" />
-              <img className="" src={require("../img/gui/robot-screen-cVe.png")}alt="" />
-              <img className="" src={require("../img/gui/robot-screen-cVi.png")}alt="" />
-              <img className="" src={require("../img/gui/robot-screen-tAm.png")}alt="" />
-              <img className="" src={require("../img/gui/robot-screen-tVe.png")}alt="" />
-              <img className="" src={require("../img/gui/robot-screen-tVi.png")}alt="" />
-              <img className="" src={require("../img/gui/robot-screen-hAm.png")}alt="" />
+              {robots.map((robot, index)=>{
+                return players.length>index ? (
+                <>{
+                  creator && !start?
+                  <img onClick={()=>kickOut(room.users[index])} className="" src={require(`../img/gui/robot-screen-${players[index].name}.png`)}alt="" /> :
+                  <img className="" src={require(`../img/gui/robot-screen-${players[index].name}.png`)}alt="" />
+                  }
+                  <p style={{color:`${roboColor(players[index].name)}`}}>{players[index].username}</p>
+                </>
+              ) : creator && !start?
+                (<img onClick={()=>addBot(index)} className="" src={require(`../img/gui/robot-screen-placeholder.png`)}alt="" /> ):(
+                <img className="" src={require(`../img/gui/robot-screen-placeholder.png`)}alt="" />)
+              })}             
+
           </div>
       </div>
       {/* END PLAYERS */}
@@ -316,7 +369,9 @@ const Game = (props) => {
             <div className="col-12 select-robot-body d-flex justify-content-center" style={{flexDirection:'column', alignItems:'center'}}>
               <div className="row d-flex justify-content-center text-center" style={{width:'80%'}}>
               {robotChoice.map(robot=>{
-              return(<div className="col-4"><img className="bg-90" src={require("../img/gui/robot-select-active-qam.png")} alt="" />{/*<p onClick={()=>setRobotChosen(robot)}>{robot}</p> <br/> <br/> */}</div>  )
+                return robotsTaken.includes(robot)? 
+              (<div className="col-4"><img className="bg-90" src={require(`../img/gui/robot-select-disable-${robot}.png`)} alt="" /></div>  ):
+              (<div className="col-4"><img onClick={()=>setRobotChosen(robot)} className="bg-90" src={require(`../img/gui/robot-select-active-${robot}.png`)} alt="" /></div>  )
             })}
               </div>
               <div className="row d-flex justify-content-center text-center" style={{width:'90%', marginTop:'3%', marginBottom:'2%'}}>
@@ -398,7 +453,10 @@ const Game = (props) => {
                     return(<div key={iCol} className={`col-1 c${iCol} tile`}> <img className="tile-bg" src={require("../img/tiles/right-border-box.png")} alt="" /></div>)
                   }else if(iRow === 11 ){
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/right-border-regular-no-shadow.png")} alt="" /></div>)
-                } else{
+                } else if(iRow === 10){
+                  return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/right-border-corner-shadow.png")} alt="" /></div>)
+                }
+                else{
                     return(<div key={iCol} className={`col-1 c${iCol} tile`}> <img className="tile-bg" src={require("../img/tiles/right-border-regular-shadow.png")} alt="" /></div>)
                   }
                 } else if(iRow === 0 && iCol === 1){
@@ -413,9 +471,14 @@ const Game = (props) => {
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/TileSep-60.png")} alt="" /></div>)
                 } else if(iRow === 11 && iCol === 10 ){
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/TileSep-59.png")} alt="" /></div>)
+                } else if(robotChoice.includes(col)){
+                  return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require(`../img/robot-sprites/${mecoName(col)}.png`)} alt="" /></div>)
+                } else if (iRow === 10 && iCol === 9){
+                  return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/TileSep-56.png")} alt="" /></div>)
+                }else if (iRow === 10 && iCol === 10){
+                  return (<div key={iCol} className={`col-1 c${iCol} tile`}><img className="tile-bg" src={require("../img/tiles/TileSep-57.png")} alt="" /></div>)
                 }
-          
-                  else {
+                 else {
                   return (<div key={iCol} className={`col-1 c${iCol} tile`}>{col}</div>)
                 }
               })}
@@ -464,14 +527,13 @@ const Game = (props) => {
                       </div>
                   </div>
                   <div class="row  no-gutters">
-                      <div className="col"><img class="tile-bg" onClick={()=>clickCard('handCards', 0)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[0])}.png`)} alt="" /></div>
-                      <div className="col"><img class="tile-bg" onClick={()=>clickCard('handCards', 1)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[1])}.png`)} alt="" /></div>
-                      <div className="col"><img class="tile-bg" onClick={()=>clickCard('handCards', 2)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[2])}.png`)} alt="" /></div>
-                      <div className="col"><img class="tile-bg" onClick={()=>clickCard('handCards', 3)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[3])}.png`)} alt="" /></div>
-                      <div className="col"><img class="tile-bg" onClick={()=>clickCard('handCards', 4)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[4])}.png`)} alt="" /></div>
-                      <div className="col"><img class="tile-bg" onClick={()=>clickCard('handCards', 5)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[5])}.png`)} alt="" /></div>
-                      <div className="col"><img class="tile-bg" onClick={()=>clickCard('handCards', 6)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[6])}.png`)} alt="" /></div>
-                      <div className="col"><img class="tile-bg" onClick={()=>clickCard('handCards', 7)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[7])}.png`)} alt="" /></div>
+                    {robots.map((r, index)=>
+                      disabled.includes('handcard'+index)? (
+                        <div className="col"><img class="tile-bg" src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[index])}_disabled.png`)} alt="" /></div>
+                      ) :(
+                        <div className="col"><img class="tile-bg" onClick={()=>clickCard('handCards', index)} src={require(`../img/gui/robot-controller/${buttonName(yourActions.handCards[index])}.png`)} alt="" /></div>
+                      )
+                    )}
                   </div>
                       <br/> <br/>
               </div>
