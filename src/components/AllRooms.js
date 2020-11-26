@@ -37,16 +37,17 @@ export function AllRooms(props){
         return (
             <>
             {id.length>0 && <Redirect to={`/rooms/${id}`} />}
-            <div className="container login-container d-flex align-items-center" style={{marginTop:'5%'}}>
-            <div className="container">
+            <div className="container login-container d-flex align-items-center" style={{marginTop:'4%'}}>
+            <div className="container" style={{marginTop:'25px', marginBottom:'75px'}}>
                 <div className="row no-gutters rooms" style={{minHeight:'500px'}}>
                     <div className="container text-center">
-                        <img class ="new-game" src={newGameBtn} style={{maxWidth:'130px', maxHeight:'60px'}}onClick={createGame} alt="Create New Game"/>
+                        {/* <img class ="new-game" src={newGameBtn} style={{maxWidth:'120px'}}  alt="Create New Game"/> */}
+                        <button className="newgame-btn" onClick={createGame} ></button>
                         <div className="row d-flex rooms-container">
                         {roomArr.length && (
                             <div style={{width:'100%', overflow: 'auto', maxHeight:'260px'}}>
                                 {roomArr.map((room, index) =>{
-                                return (<p>{room.creator}'s game ({room.users.length} / 8) <span onClick={()=>joinGame(room.room, index)} key={room.room} className="a-login">Join Game</span> </p>)//aixo hauria de ser una funcio que miri si hi ha lloc i després el fiqui
+                                return (<p style={{marginBottom:'5px'}}>{room.creator}'s game ({room.users.length} / 8) <span onClick={()=>joinGame(room.room, index)} key={room.room} className="a-login">Join Game</span> </p>)//aixo hauria de ser una funcio que miri si hi ha lloc i després el fiqui
                                 })}
                             </div>)} 
                         </div>

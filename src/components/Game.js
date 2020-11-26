@@ -375,7 +375,7 @@ const Game = (props) => {
               </div>
               <div className="row d-flex justify-content-center text-center" style={{width:'90%', marginTop:'3%', marginBottom:'2%'}}>
               {
-                (ready) ? <img onClick={changeReady} className="robot-selection-btn" src={require("../img/btn/btn-ready-ready.png")} style={{maxWidth:'130px', maxHeight:'60px', border:'1px solid #ffd21f', display:'inline'}} alt="Ready" /> :
+                (ready) ? <img onClick={changeReady} className="robot-selection-btn" src={require("../img/btn/btn-ready-ready.png")} style={{maxWidth:'130px', maxHeight:'60px', border:'1px solid  #ffcc00', display:'inline'}} alt="Ready" /> :
                 <img onClick={changeReady} className="robot-selection-btn" src={require("../img/btn/btn-ready-notready.png")} style={{maxWidth:'130px', maxHeight:'60px', display:'inline'}} alt="Not Ready" />
               }
                 { room.users.every(user => user.ready === true) && creator && <img className="robot-selection-btn" onClick={startGame} src={require("../img/btn/btn-start-enabled.png")} style={{maxWidth:'130px', maxHeight:'60px', display:'inline', paddingLeft:'2%'}} alt="Start Game" />}
