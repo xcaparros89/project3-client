@@ -40,19 +40,25 @@ class Login extends Component {
             </div>
             <div className="row no-gutters">
                 <div className="container login-inner-container">
-                    <div className="col-12 text-center login">
-                        <form id="signup-form" onSubmit={(e)=>this.handleFormSubmit(e)}>
-                            <div className="form-group">
-                              <input type="text" name="username" value={username} className="form-control" placeholder="Username" onChange={this.handleChange} />
-                            </div>
-                            <div className="form-group">
-                                <input type="password" name="password" value={password} className="form-control" placeholder="Password" onChange={this.handleChange} />
-                            </div>
-                            <input type='submit' className="submitPlayBtn" value='' />
-                            <p className="" style={{marginBottom:"0"}}>Don't you have an account?</p>
-                            <p><Link to={"/guest"} className="a-login">Play as Guest</Link> or <Link to={"/signup"} className="a-login">Register</Link></p>
-                        </form>
-                    </div>
+                <div className="col-12">
+					        <img src={require("../img/home-login-bg-top.png")} alt="" className="tile-bg"/>
+                </div>
+                <div className="col-12 text-center login">
+                    <form id="signup-form" onSubmit={(e)=>this.handleFormSubmit(e)}>
+                        <div className="form-group">
+                          <input type="text" name="username" value={username} className="form-control" placeholder="Username" onChange={this.handleChange} />
+                        </div>
+                        <div className="form-group">
+                            <input type="password" name="password" value={password} className="form-control" placeholder="Password" onChange={this.handleChange} />
+                        </div>
+                        <input type='submit' className="submitPlayBtn" value='' />
+                        <p className="" style={{marginBottom:"0"}}>Don't you have an account?</p>
+                        <p className="last-p"><Link to={"/guest"} className="a-login">Play as Guest</Link> or <Link to={"/signup"} className="a-login">Register</Link></p>
+                    </form>
+                </div>
+                <div className="col-12">
+					        <img src={require("../img/home-login-bg-footer.png")} alt="" className="tile-bg"/>
+                </div>
                 </div>
             </div>
         </div>

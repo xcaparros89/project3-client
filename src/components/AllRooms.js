@@ -45,8 +45,14 @@ export function AllRooms(props){
                     <div className="container text-center">
                         {/* <img class ="new-game" src={newGameBtn} style={{maxWidth:'120px'}}  alt="Create New Game"/> */}
                         <button className="newgame-btn" onClick={createGame} ></button>
+                        <input type="submit" className="newgame-btn"/>
                         <div className="row d-flex rooms-container">
-                        {roomArr.length && (
+                        {  !roomArr.length && 
+                           <div style={{width:'100%', overflow: 'auto', maxHeight:'260px'}}>
+                            <p style={{marginBottom:'10px'}}>There are no current games. <br/><span onClick={createGame} className="a-login">Create Game</span></p>
+                           </div>
+                        }
+                        {roomArr.length>0 && (
                             <div style={{width:'100%', overflow: 'auto', maxHeight:'260px'}}>
                                 {roomArr.map((room, index) =>{
                                 return (<p style={{marginBottom:'5px'}}>{room.creator}'s game ({room.users.length} / 8) <span onClick={()=>joinGame(room.room, index)} key={room.room} className="a-login">Join Game</span> </p>)//aixo hauria de ser una funcio que miri si hi ha lloc i després el fiqui

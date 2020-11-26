@@ -23,16 +23,21 @@ function Home() {
 		</div>
 		<div className="row no-gutters">
 			<div className="container login-inner-container">
+				<div className="col-12">
+					<img src={require("../img/home-login-bg-top.png")} alt="" className="tile-bg"/>
+				</div>
 				<div className="col-12 text-center login">
 					<p className="login-text">Assume control of a robot in a dangerous widget factory filled with moving, course-altering conveyor belts, metal-melting laser beams,  bottomless pits, crushers and a variety of other obstacles. Just try to survive and escape!</p>
 					<Link to={"/login"} className="a-login"><button className="submitLoginBtn"></button></Link>
 					<p className="" style={{marginBottom:"0"}}>Don't you have an account?</p>
-					<p><Link to={"/guest"} className="a-login">Play as Guest</Link> or <Link to={"/signup"} className="a-login">Register</Link></p>
-					<br/><br/><br/>
+					<p className="last-p"><Link to={"/guest"} className="a-login">Play as Guest</Link> or <Link to={"/signup"} className="a-login">Register</Link></p>
+
+				</div>
+				<div className="col-12">
+					<img src={require("../img/home-login-bg-footer.png")} alt="" className="tile-bg"/>
 				</div>
 			</div>
 		</div>
-			   
 	</div>
 </div>
   )

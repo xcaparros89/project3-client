@@ -38,6 +38,9 @@ class Signup extends Component {
             </div>
             <div className="row no-gutters">
                 <div className="container login-inner-container">
+                <div className="col-12">
+					        <img src={require("../img/home-login-bg-top.png")} alt="" className="tile-bg"/>
+                </div>
                     <div className="col-12 text-center login">
                         <form id="signup-form" onSubmit={this.handleFormSubmit}>
                             <div className="form-group">
@@ -50,6 +53,9 @@ class Signup extends Component {
                             <p className="" style={{marginBottom:"0"}}>Already have an account? <Link to={"/login"} className="a-login"> Login</Link></p> 
                         </form>
                     </div>
+                    <div className="col-12">
+					        <img src={require("../img/home-login-bg-footer.png")} alt="" className="tile-bg"/>
+                </div>
                 </div>
             </div>
         </div>

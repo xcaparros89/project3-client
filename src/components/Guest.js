@@ -38,17 +38,31 @@ class Guest extends Component {
             </div>
             <div className="row no-gutters">
                 <div className="container login-inner-container">
+                <div className="col-12">
+				    <img src={require("../img/home-login-bg-top.png")} alt="" className="tile-bg"/>
+                </div>
                     <div className="col-12 text-center login">
-                        <form id="signup-form"  onSubmit={(e)=>this.handleFormSubmit(e)}>
-                            <div className="form-group">
+
+                        <div className="d-flex align-items-center" style={{width:'100%', height:'100%', justifyContent:'center'}}>
+
+                        <form id="signup-form"  onSubmit={(e)=>this.handleFormSubmit(e)} style={{alignSelf:'center'}}>
+                            <div className="form-group" >
                               <input type="text" name="guest" value={guest} className="form-control" placeholder="Type a Name" onChange={this.handleChange} />
                             </div>
                             <input type='submit' className="submitPlayBtn" value='' />
                             <p className="" style={{marginBottom:"0"}}>Already have an account? </p>
-                            <p><Link to={"/login"} className="a-login"> Login</Link> or <Link to={"/signup"} className="a-login"> Signup</Link> to create it.</p> 
-                            <br/>
+                            <p className="last-p"><Link to={"/login"} className="a-login"> Login</Link> or <Link to={"/signup"} className="a-login"> Signup</Link> to create it.</p> 
                         </form>
+
+
+
+                        </div>
+
+
                     </div>
+                    <div className="col-12">
+				    <img src={require("../img/home-login-bg-footer.png")} alt="" className="tile-bg"/>
+                </div>
                 </div>
             </div>
         </div>
