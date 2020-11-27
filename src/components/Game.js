@@ -649,7 +649,7 @@ const Game = (props) => {
                   </div>
               <div className="row no-gutters" style={{marginBottom: '4%'}}>
                   <div className="col-4">
-                      <img className="tile-bg" src={require(`../img/gui/robot-controller/robot-placeholder.png`)} alt="Your Robot" />
+                      <img className="tile-bg" src={require(`../img/gui/robot-controller/robot-placeholder-${robotChosen}.png`)} alt="Your Robot" />
                   </div>
                   <div className="col-8">
                           <div className="row cards-to-play no-gutters">
@@ -680,8 +680,7 @@ const Game = (props) => {
               <div className="row no-gutters" style={{marginBottom:'4%'}}>
               {robots.map((robot, index)=>{
                 return players.length>index ? (
-                <div classname="col-3"> 
-                  <p className="robot-placeholder-name" style={{color:`${roboColor(players[index].name)}`}}>{players[index].username}</p>
+                  <div className="col-3"><p className="robot-placeholder-name" style={{color:`${roboColor(players[index].name)}`}}>{players[index].username}</p>
                   {
                   creator && !start?
                   <img onClick={()=>kickOut(room.users[index])} className="" src={require(`../img/gui/robot-screen-${players[index].name}.png`)} alt="" /> :
@@ -690,8 +689,9 @@ const Game = (props) => {
                 </div>
                 
               ) : creator && !start?
-                (<img onClick={()=>addBot(index)} className="" src={require(`../img/gui/robot-screen-placeholder.png`)}alt="" /> ):(
-                  <div clasName="col-3"><img className="" src={require(`../img/gui/robot-screen-placeholder.png`)}alt="" /></div>)
+                (
+                <img onClick={()=>addBot(index)} className="" src={require(`../img/gui/robot-screen-placeholder.png`)}alt="" /> ):(
+                 <img style={{width:'50%'}} className="" src={require(`../img/gui/robot-screen-placeholder.png`)}alt="" />)
               })}
               </div>
               <hr/>
@@ -717,7 +717,7 @@ const Game = (props) => {
               return (
                 <div key={index} className=''>
                   <p className="" style={{marginBottom:'0px', fontSize:'.9rem'}}><span className="a-login">{message.username}</span> <span style={{color:'#5a5a5a'}}>{message.time}</span></p>
-                  <p className="" style={{marginBottom:'2px', fontSize:'.9rem'}}>{message.text}</p> {/* borderBottom:'2px solid #212121*/}
+                  <p className="t" style={{marginBottom:'2px', fontSize:'.9rem'}}>{message.text}</p> {/* borderBottom:'2px solid #212121*/}
                 </div>
               )
               })}
