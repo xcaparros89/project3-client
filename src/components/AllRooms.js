@@ -41,6 +41,46 @@ export function AllRooms(props){
             <Navbar />
             {id.length>0 && <Redirect to={`/rooms/${id}`} />}
             <div className="container login-container d-flex align-items-center">
+                <div className="container home-bg">
+                    <div className="row no-gutters">
+                        <div className="container login-inner-container">
+                        <div className="col-12">
+                            <img src={require("../img/allrooms-bg-top.png")} alt="" className="tile-bg"/>
+                        </div>
+                            <div className="col-12 text-center allrooms">
+                            <button className="newgame-btn" onClick={createGame} ></button>
+                                <div className="rooms-container d-flex align-items-center" style={{padding:'5%'}}>
+
+                                
+                        {  !roomArr.length && 
+                           <div style={{width:'100%', overflow: 'auto', maxHeight:'260px', alignSelf:'center'}}>
+                            <p style={{marginBottom:'10px'}}>There are no current games. <br/><span onClick={createGame} className="a-login">Create Game</span></p>
+                           </div>
+                        }
+                        {roomArr.length>0 && (
+                            <div style={{width:'100%', overflow: 'auto', maxHeight:'260px', alignSelf:'center'}}>
+                                {roomArr.map((room, index) =>{
+                                return (<p style={{marginBottom:'5px'}}>{room.creator}'s game ({room.users.length} / 8) <span onClick={()=>joinGame(room.room, index)} key={room.room} className="a-login">Join Game</span> </p>)//aixo hauria de ser una funcio que miri si hi ha lloc i després el fiqui
+                                })}
+                            </div>)} 
+                            </div>
+
+                                </div>
+
+                            <div className="col-12">
+                                    <img src={require("../img/allrooms-bg-footer.png")} alt="" className="tile-bg"/>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+</>
+
+
+
+
+
+            /* <div className="container login-container d-flex align-items-center">
             <div className="container home-bg">
                 <div className="row no-gutters">
                     <div className="col-12">
@@ -67,7 +107,7 @@ export function AllRooms(props){
             </div>
         </div>
         </div>
-        </>
+        </> */
         )
 }
 
