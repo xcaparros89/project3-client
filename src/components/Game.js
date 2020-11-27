@@ -76,12 +76,9 @@ const Game = (props) => {
         
           socket.on('finishGame',({winner, newBoard, newPlayers})=>{
             console.log('winner', winner)
-<<<<<<< HEAD
             alert('The winner is: ' + winner)
-=======
-            alert('the winner is: ' + winner)
             setTimeout(()=>history.push({pathname: `/allRooms`}), 5000); 
->>>>>>> 3fd4e975c32a857d9bcb68562fbd554af494db9a
+
           })
 
           socket.on('doActions',({newIPlayer, newIAction, newBoard, newPlayers, isTwo, creator})=>{
