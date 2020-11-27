@@ -5,10 +5,6 @@ import { withAuth } from "../lib/AuthProvider";
 class Navbar extends Component {
   render() {
     const {logout, isLoggedin } = this.props;
-    const redirect = ()=>{
-      logout();
-      
-    }
     return (
         isLoggedin && ( 
         <div className="container-fluid navbar-container d-flex justify-content-center">

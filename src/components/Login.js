@@ -2,9 +2,7 @@ import React, { Component } from "react";
 import { withAuth } from "../lib/AuthProvider";
 import { Redirect } from 'react-router-dom';
 import logo from "../img/logo.png"
-import playBtn from "../img/btn/btn-play.png";
 import { Link } from "react-router-dom";
-import $ from 'jquery';
 
 class Login extends Component {
   state = { username: "", password: "" };

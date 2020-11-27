@@ -8,9 +8,7 @@
     font-style: normal;
     font-display: swap;
 }
-
 @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
-
 body {
     background-color: #626e7c;
     background: url(../img/main-bg.png);
@@ -20,19 +18,25 @@ body {
     margin-top:0;
 }
 
-.inner-boddy-container {
-    margin-top:50px;
-}
-
 @media (max-width:1380px){
     body{
+        /* margin-top:45px; */
         background: url(../img/bg-pattern.png);
         background-repeat: repeat;
     }
-    .inner-boddy-container {
-        margin-top: 0;
-    }
 
+}
+
+@media (max-width:900px){
+    body{
+        /* margin-top:30px; */
+    }
+}
+
+@media (max-width:576px){
+    body{
+        /* margin-top:10px; */
+    }
 }
 
 @media (max-width:420px){
@@ -48,6 +52,7 @@ hr {
 
 body.home {
     background-color: #626e7c!important; 
+    background: url();
 }
 
 p {
@@ -215,35 +220,6 @@ h1 {
     background-size: cover;
 }
 
-.r3c5_bg {
-    background: url(../img/tiles/r3c5_bg.png);
-    background-repeat: no-repeat;
-    background-size: cover; 
-}
-
-.r1c8_bg{
-    background: url(../img/tiles/r1c8_bg.png);
-    background-repeat: no-repeat;
-    background-size: cover;  
-}
-
-.r3c7_bg {
-    background: url(../img/tiles/r3c7_bg.png);
-    background-repeat: no-repeat;
-    background-size: cover; 
-}
-.r6c3_bg {
-    background: url(../img/tiles/r6c3_bg.png);
-    background-repeat: no-repeat;
-    background-size: cover; 
-}
-
-.r6c5_bg {
-    background: url(../img/tiles/r6c5_bg.png);
-    background-repeat: no-repeat;
-    background-size: cover; 
-}
-
 .tile-50 {
     background: url(../img/tiles/TileSep-50.png);
     background-repeat: no-repeat;
@@ -278,10 +254,18 @@ p.robot-placeholder-name {
     height:60px; /* 47*/
     border:none;
     background-color: #2f2f2f;
+    margin-top:15px;
+    margin-bottom:10px;
+    margin-top: 22%;
 }
 
 
 @media (max-width: 375px) {
+
+}
+
+
+.newgame-btn {
 
 }
 
@@ -324,18 +308,10 @@ p.robot-placeholder-name {
     background-position: center;
 }
 
-
-
 .login {
     background: url(../img/home-login-bg.png);
     background-repeat: repeat-y;
     background-size: contain;
-}
-
-.allrooms {
-    background: url(../img/allrooms-bg-body.png);
-    background-repeat: repeat-y;
-    background-size: contain; 
 }
 
 .login-footer {
@@ -435,14 +411,14 @@ p.robot-placeholder-name {
 }
 
 @media (min-width: 477px) and (max-width:576px) {
-    .submitLoginBtn, .submitPlayBtn, .submitSignupBtn, .newgame-btn {
+    .submitLoginBtn, .submitPlayBtn, .submitSignupBtn {
         width:107px; /* 107 */
         height:47px; /* 47*/ 
     }
 }
 
 @media (max-width:476px) {
-    .submitLoginBtn, .submitPlayBtn, .submitSignupBtn, .newgame-btn {
+    .submitLoginBtn, .submitPlayBtn, .submitSignupBtn {
         width:79px; /* 107 */
         height:35px; /* 47*/ 
     }
@@ -513,13 +489,4 @@ p.robot-placeholder-name {
 .robot-selection-btn {
     width:25%;
     cursor: pointer;
-}
-
-.rooms-container {
-    border-radius:10px;
-    border: 2px solid #202020;
-    background-color: #2f2f2f;
-    margin-left: 10%;
-    margin-right: 10%;
-    margin-top:3%;
 }
