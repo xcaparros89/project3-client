@@ -8,7 +8,9 @@
     font-style: normal;
     font-display: swap;
 }
+
 @import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
+
 body {
     background-color: #626e7c;
     background: url(../img/main-bg.png);
@@ -18,25 +20,19 @@ body {
     margin-top:0;
 }
 
+.inner-boddy-container {
+    margin-top:50px;
+}
+
 @media (max-width:1380px){
     body{
-        /* margin-top:45px; */
         background: url(../img/bg-pattern.png);
         background-repeat: repeat;
     }
-
-}
-
-@media (max-width:900px){
-    body{
-        /* margin-top:30px; */
+    .inner-boddy-container {
+        margin-top: 0;
     }
-}
 
-@media (max-width:576px){
-    body{
-        /* margin-top:10px; */
-    }
 }
 
 @media (max-width:420px){
