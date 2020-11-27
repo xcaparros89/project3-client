@@ -1,10 +1,10 @@
-import React, { Component, useEffect, useState, useRef } from "react";
+import React, { useEffect, useState} from "react";
 import { withAuth } from "../lib/AuthProvider";
 import { io } from "socket.io-client";
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 import './Game.css'
-import {startingBoard, startingDeck, shuffle, orientationToString, findEmptyStartingPos} from '../utils/gameAct'
+import {orientationToString, findEmptyStartingPos} from '../utils/gameAct'
 import Draggable from 'react-draggable'; 
 
 //const socket = io(process.env.REACT_APP_API_URL, {

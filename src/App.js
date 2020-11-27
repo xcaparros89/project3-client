@@ -12,7 +12,6 @@ import Guest from "./components/Guest";
 import Private from "./components/Private";
 import Lobby from './components/Lobby';
 import Game from './components/Game';
-import Home from './components/Home'
 import AllRooms from './components/AllRooms'
 import HomeOrRooms from './components/HomeOrRooms'
 import PrivateRoute from "./routes/PrivateRoute";

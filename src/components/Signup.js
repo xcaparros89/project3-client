@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 import { withAuth } from "../lib/AuthProvider";
 import logo from "../img/logo.png"
 import { Redirect } from 'react-router-dom';
-import signupBtn from "../img/btn/btn-signup.png";
-import $ from 'jquery';
 
 class Signup extends Component {
   state = { username: "", password: "" };
