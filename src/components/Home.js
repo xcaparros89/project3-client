@@ -1,8 +1,15 @@
 import React from 'react'
+import Login from './Login'
 import logo from '../img/logo.png'
+import loginBtn from "../img/btn/btn-login.png";
 import { Link } from "react-router-dom";
 
 function Home() {
+  let handleFormSubmit = (event) => {
+    event.preventDefault();
+    const { email, password } = this.state;
+    this.props.login({ email, password });
+  };
 
   document.body.classList.add('home');
 

@@ -10,7 +10,9 @@ import Signup from "./components/Signup";
 import Login from "./components/Login";
 import Guest from "./components/Guest";
 import Private from "./components/Private";
+import Lobby from './components/Lobby';
 import Game from './components/Game';
+import Home from './components/Home'
 import AllRooms from './components/AllRooms'
 import HomeOrRooms from './components/HomeOrRooms'
 import PrivateRoute from "./routes/PrivateRoute";
@@ -25,6 +27,7 @@ class App extends Component {
             <Route exact path='/login' component={Login} />
             <Route exact path='/guest' component={Guest} />
             <PrivateRoute exact path='/private' component={Private} />
+            <Route exact path='/Lobby' component={Lobby}/>
             <Route exact path='/allRooms' component={AllRooms}/>
             <Route exact path='/rooms/:id' component={(props)=><Game {...props} />}/>
 

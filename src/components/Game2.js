@@ -307,7 +307,7 @@ const Game = (props) => {
   return (
   <div className="container container-body">
 
-<div className="container-fluid d-flex justify-content-center inner-boddy-container">
+<div className="container-fluid d-flex justify-content-center" style={{marginTop:'50px'}}>
           <div className="row navbar-row-ingame d-flex justify-content-center end">
               <Link to={"/"} id='home-btn'>
                 <button className='homeBtn'></button>
@@ -323,7 +323,7 @@ const Game = (props) => {
               </Link>
           </div>
         </div>
-      {/* START CHAT */}
+      {/* END CHAT */}
       <div className="float-left chat-container">
           <div className="chat" style={{height:'585px'}}>
             <div className="chat-messages" style={{height:'490px', overflow:'hidden', marginBottom:'20px'}}>
@@ -640,7 +640,7 @@ const Game = (props) => {
           {/* END DRAGGABLE DECK */}
           {/* START STATIC DECK */}
           <div className="container deck-bg static-deck-container">
-              <div id="" className="row no-gutters" style={{marginBottom: '4%', paddingTop:'15%'}}>
+              <div id="" className="row no-gutters" style={{marginBottom: '4%'}}>
                       <div className="col-8 d-flex align-items-center"><img className="robot-controller-title" src={require("../img/gui/robot-controller/robot-controller-title.png")} alt="" /></div>
                       <div className="col-2 d-flex align-items-center" style={{paddingLeft:'4%', paddingRight:'1%'}}>
                         {disabled.includes('endTurn')? <img  onClick={()=>endTurn()} className="clock" src={require("../img/gui/robot-controller/clock_disabled.png")} alt="" /> : <img  onClick={()=>endTurn()} className="clock" src={require("../img/gui/robot-controller/clock_active.png")} alt="" />}
@@ -678,21 +678,32 @@ const Game = (props) => {
               <div id="" className="row no-gutters first-row" style={{marginBottom: '6%'}}>
               </div>
               <div className="row no-gutters" style={{marginBottom:'4%'}}>
-              {robots.map((robot, index)=>{
-                return players.length>index ? (
-                <div classname="col-3"> 
-                  <p className="robot-placeholder-name" style={{color:`${roboColor(players[index].name)}`}}>{players[index].username}</p>
-                  {
-                  creator && !start?
-                  <img onClick={()=>kickOut(room.users[index])} className="" src={require(`../img/gui/robot-screen-${players[index].name}.png`)} alt="" /> :
-                  <img className="" src={require(`../img/gui/robot-screen-${players[index].name}.png`)}alt="" />
-                  }
-                </div>
-                
-              ) : creator && !start?
-                (<img onClick={()=>addBot(index)} className="" src={require(`../img/gui/robot-screen-placeholder.png`)}alt="" /> ):(
-                  <div clasName="col-3"><img className="" src={require(`../img/gui/robot-screen-placeholder.png`)}alt="" /></div>)
-              })}
+                  <div className="col-3">
+                      <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
+                  </div>
+                  <div className="col-3">
+                      <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
+                  </div>
+                  <div className="col-3">
+                      <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
+                  </div>
+                  <div className="col-3">
+                      <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
+                  </div>
+              </div>
+              <div className="row no-gutters" style={{marginBottom: '4%'}}>
+                  <div className="col-3">
+                      <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
+                  </div>
+                  <div className="col-3">
+                      <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
+                  </div>
+                  <div className="col-3">
+                      <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
+                  </div>
+                  <div className="col-3">
+                      <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
+                  </div>
               </div>
               <hr/>
           </div>
@@ -707,24 +718,16 @@ const Game = (props) => {
                   </div>
               </div>
               <hr/>
-              hello ima another chat
               <hr/>
           </div>
           {/* END LOW RES CHAT */}
           {/*- START CHAT FOR MID SIZE RESOLUTIONS */}
-          <div className="chat-mid-res-bg">
-              {room.messages.map((message, index)=>{
-              return (
-                <div key={index} className=''>
-                  <p className="" style={{marginBottom:'0px', fontSize:'.9rem'}}><span className="a-login">{message.username}</span> <span style={{color:'#5a5a5a'}}>{message.time}</span></p>
-                  <p className="" style={{marginBottom:'2px', fontSize:'.9rem'}}>{message.text}</p> {/* borderBottom:'2px solid #212121*/}
-                </div>
-              )
-              })}
-              <form id="chat-form" onSubmit={(e)=>sendMessage(e)}>
-                <input id="msg" className="" type="text" placeholder="Enter Message" style={{width:'218px', textAlign:'left', fontFamily:'Courier Prime', fontSize:'.9rem'}} required autoComplete="off" />
-              </form>
-          </div>
+              <div className="container chat-mid-res-bg">
+                  <div id="draggableheader" className="row no-gutters" style={{marginBottom:'3%'}}></div>
+                  <div className="row">
+                      <div className="col-12"></div>
+                  </div>
+              </div>
           {/*- END CHAT FOR MID SIZE RESOLUTIONS */}
       </>
       // END BOARD
