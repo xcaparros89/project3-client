@@ -3,7 +3,6 @@ import shortid from 'shortid'
 import { useHistory, Redirect } from "react-router-dom";
 import { withAuth } from "../lib/AuthProvider";
 import axios from "axios";
-import newGameBtn from "../img/btn/btn-new-game.png"
 import Navbar from "./Navbar";
 
 

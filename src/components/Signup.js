@@ -3,8 +3,6 @@ import { Link } from "react-router-dom";
 import { withAuth } from "../lib/AuthProvider";
 import logo from "../img/logo.png"
 import { Redirect } from 'react-router-dom';
-import signupBtn from "../img/btn/btn-signup.png";
-import $ from 'jquery';
 
 class Signup extends Component {
   state = { username: "", password: "" };
@@ -29,6 +27,7 @@ class Signup extends Component {
     const { username, password } = this.state;
     return (
       <> {this.props.isLoggedin && <Redirect to='/allRooms' />}
+       {console.log(this.props.isLoggedin, 'isLoggedin')}
     <div className="container login-container d-flex align-items-center">
         <div className="container home-bg">
             <div className="row no-gutters">

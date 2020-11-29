@@ -46,6 +46,7 @@ class AuthProvider extends React.Component {
   }
 
   signup = (user) => {
+    console.log(user, 'user signup')
     const { username, password } = user;
 
     auth
@@ -57,6 +58,7 @@ class AuthProvider extends React.Component {
   };
 
   login = (user) => {
+    console.log(user, 'user login')
     const { username, password } = user;
 
     auth
