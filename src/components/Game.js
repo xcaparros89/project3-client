@@ -315,7 +315,7 @@ const Game = (props) => {
               </Link>
           </div>
         </div>
-      {/* END CHAT */}
+      {/* START CHAT */}
       <div className="float-left chat-container">
           <div className="chat" style={{height:'585px'}}>
             <div className="chat-messages" style={{height:'490px', overflow:'hidden', marginBottom:'20px'}}>
@@ -387,8 +387,8 @@ const Game = (props) => {
         // END ROBOT SELECTION
     )}
     {
-      start && (
       // START BOARD
+      start && (
       <>
         <Map board={board} players={players}/>
         {/* START DRAGGABLE DECK*/}

@@ -83,16 +83,16 @@ function Map(props) {
                 else {
                     return(<div key={iCol} className={`col-1 c${iCol} tile`}> <img className="tile-bg" src={require("../img/tiles/right-border-regular-shadow.png")} alt="" /></div>)
                   }
+                } else if(iRow === 0 && iCol === 4){
+                  return(<div key={iCol} className={`col-1 c${iCol} ts47`}>{robotChoice.includes(col)?<img className="tile-bg" src={require(`../img/robot-sprites/${mecoName(col)}.png`)} alt="" />:''}</div>)
                 } else if(iRow === 0 && iCol === 5){
                   return (<div key={iCol} className={`col-1 c${iCol} finish`}>{robotChoice.includes(col)?<img className="tile-bg" src={require(`../img/robot-sprites/${mecoName(col)}.png`)} alt="" />:''}</div>)
-                } else if(iRow === 0 && iCol === 4){
-                  return(<div key={iCol} className={`col-1 c${iCol} tile ts47`}>{robotChoice.includes(col)?<img className="tile-bg" src={require(`../img/robot-sprites/${mecoName(col)}.png`)} alt="" />:''}</div>)
                 }else if(iRow === 0 && iCol === 6){
-                  return(<div key={iCol} className={`col-1 c${iCol} tile ts47`}>{robotChoice.includes(col)?<img className="tile-bg" src={require(`../img/robot-sprites/${mecoName(col)}.png`)} alt="" />:''}</div>)
+                  return(<div key={iCol} className={`col-1 c${iCol} ts47`}>{robotChoice.includes(col)?<img className="tile-bg" src={require(`../img/robot-sprites/${mecoName(col)}.png`)} alt="" />:''}</div>)
                 }else if(iRow === 0 && iCol === 7){
-                  return(<div key={iCol} className={`col-1 c${iCol} tile ts47`}>{robotChoice.includes(col)?<img className="tile-bg" src={require(`../img/robot-sprites/${mecoName(col)}.png`)} alt="" />:''}</div>)
+                  return(<div key={iCol} className={`col-1 c${iCol} ts47`}>{robotChoice.includes(col)?<img className="tile-bg" src={require(`../img/robot-sprites/${mecoName(col)}.png`)} alt="" />:''}</div>)
                 } else if(iRow === 0 && iCol === 8){
-                  return(<div key={iCol} className={`col-1 c${iCol} tile ts47`}>{robotChoice.includes(col)?<img className="tile-bg" src={require(`../img/robot-sprites/${mecoName(col)}.png`)} alt="" />:''}</div>)
+                  return(<div key={iCol} className={`col-1 c${iCol} ts47`}>{robotChoice.includes(col)?<img className="tile-bg" src={require(`../img/robot-sprites/${mecoName(col)}.png`)} alt="" />:''}</div>)
                 }  
                 
                 else if(iRow === 0 && iCol === 3){

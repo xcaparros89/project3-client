@@ -221,7 +221,9 @@ h1 {
 }
 
 .ts47{
-    /* background: url(../img/tiles/TileSep-47.png); */
+    background: url(../img/tiles/TileSep-47.png);
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .r3c5_bg {
