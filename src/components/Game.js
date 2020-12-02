@@ -3,7 +3,6 @@ import { withAuth } from "../lib/AuthProvider";
 import { io } from "socket.io-client";
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
-import './Game.css'
 import {orientationToString, findEmptyStartingPos} from '../utils/gameAct'
 import Draggable from 'react-draggable'; 
 import Map from './Map'
