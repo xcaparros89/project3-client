@@ -220,6 +220,10 @@ h1 {
     background-size: cover;
 }
 
+.ts47{
+    background: url(../img/tiles/TileSep-47.png);
+}
+
 .r3c5_bg {
     background: url(../img/tiles/r3c5_bg.png);
     background-repeat: no-repeat;
