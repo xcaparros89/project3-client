@@ -472,7 +472,7 @@ const Game = (props) => {
       // END BOARD
   )}
   {/* START STATIC ROBOTS */}
-  <div className="container robot-placeholder static-deck-container">
+  <div className="container robot-placeholder">
               <div id="" className="row no-gutters first-row" style={{marginBottom: '6%'}}>
               </div>
               <div className="row no-gutters" style={{marginBottom:'4%'}}>

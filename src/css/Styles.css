@@ -177,6 +177,8 @@ h1 {
     background: url(../img/robots-placeholder.png);
     background-size: 100%;
     background-repeat: no-repeat;
+    max-width: 500px;
+    margin-bottom: 2%;
 }
 
 .robot-placeholder > .first-row {

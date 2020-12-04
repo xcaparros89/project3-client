@@ -8,6 +8,10 @@
     .container.deck-container{
         left:-70%;
     }
+    .draggable-deck {
+        display: none;
+    }
+
 }
 
 @media (max-width:900px){
@@ -23,13 +27,9 @@
     .chat-mid-res-bg {
         display:none;
     }
-
-    .draggable-deck {
-        display: none;
-    }
 }
 
-@media(min-width:901px){
+@media(min-width:1200px){
     .static-deck-container {
         display:none;
     }
@@ -44,6 +44,12 @@
 @media(min-width:797px){
     img.login-btn {
         max-width:130px;
+    }
+}
+
+@media(min-width:900px){
+    .robot-placeholder {
+        display:none
     }
 }
 
