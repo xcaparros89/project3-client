@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
 @font-face {
     font-family: 'Transformers Movie';
     src: url('../fonts/TransformersMovie.eot');
@@ -8,7 +9,7 @@
     font-style: normal;
     font-display: swap;
 }
-@import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
+
 body {
     background-color: #626e7c;
     background: url(../img/main-bg.png);
@@ -20,23 +21,10 @@ body {
 
 @media (max-width:1380px){
     body{
-        /* margin-top:45px; */
         background: url(../img/bg-pattern.png);
         background-repeat: repeat;
     }
 
-}
-
-@media (max-width:900px){
-    body{
-        /* margin-top:30px; */
-    }
-}
-
-@media (max-width:576px){
-    body{
-        /* margin-top:10px; */
-    }
 }
 
 @media (max-width:420px){
@@ -533,4 +521,10 @@ p.robot-placeholder-name {
     margin-left: 10%;
     margin-right: 10%;
     margin-top:3%;
+}
+
+@media (min-width:1381px){
+    .custom-navbar {
+        margin-top:50px;
+    }
 }

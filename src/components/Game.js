@@ -299,7 +299,7 @@ const Game = (props) => {
   return (
   <div className="container container-body">
 
-<div className="container-fluid d-flex justify-content-center" style={{marginTop:'50px'}}>
+<div className="container-fluid d-flex justify-content-center custom-navbar">
           <div className="row navbar-row-ingame d-flex justify-content-center end">
               <Link to={"/"} id='home-btn'>
                 <button className='homeBtn'></button>
@@ -467,8 +467,12 @@ const Game = (props) => {
                   <hr/>
           </div>
           {/* END STATIC DECK */}
-          {/* START STATIC ROBOTS */}
-          <div className="container robot-placeholder static-deck-container">
+          
+      </>
+      // END BOARD
+  )}
+  {/* START STATIC ROBOTS */}
+  <div className="container robot-placeholder static-deck-container">
               <div id="" className="row no-gutters first-row" style={{marginBottom: '6%'}}>
               </div>
               <div className="row no-gutters" style={{marginBottom:'4%'}}>
@@ -523,9 +527,6 @@ const Game = (props) => {
                   </div>
               </div>
           {/*- END CHAT FOR MID SIZE RESOLUTIONS */}
-      </>
-      // END BOARD
-  )}
   </div>
 )}
 
