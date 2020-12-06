@@ -430,7 +430,6 @@ const Game = (props) => {
               </div>
           </div>
         </Draggable>
-
           {/* END DRAGGABLE DECK */}
           {/* START STATIC DECK */}
           <div className="container deck-bg static-deck-container">
@@ -471,62 +470,101 @@ const Game = (props) => {
       </>
       // END BOARD
   )}
-  {/* START STATIC ROBOTS */}
-  <div className="container robot-placeholder">
-              <div id="" className="row no-gutters first-row" style={{marginBottom: '6%'}}>
-              </div>
-              <div className="row no-gutters" style={{marginBottom:'4%'}}>
-                  <div className="col-3">
-                      <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
-                  </div>
-                  <div className="col-3">
-                      <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
-                  </div>
-                  <div className="col-3">
-                      <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
-                  </div>
-                  <div className="col-3">
-                      <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
-                  </div>
-              </div>
-              <div className="row no-gutters" style={{marginBottom: '4%'}}>
-                  <div className="col-3">
-                      <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
-                  </div>
-                  <div className="col-3">
-                      <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
-                  </div>
-                  <div className="col-3">
-                      <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
-                  </div>
-                  <div className="col-3">
-                      <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
-                  </div>
-              </div>
-              <hr/>
+  {/* START STATIC ROBOTS AND CHAT*/}
+        <div className="row no-gutters robot-placeholder">
+          <div id="" className="col-12" style={{marginTop:'15px'}}>
+          <img className="tile-bg" src={require("../img/robots-selected-small-header.png")} alt="" />
           </div>
-          {/* STRAT STATIC DECK */}
-          {/* START LOW RES CHAT */}
-          <div className="container robot-placeholder static-deck-container">
-              <div id="" className="row no-gutters first-row" style={{marginBottom: '6%'}}>
+          <div className="col-12 selected-robot-body">
+          <div className="row">
+            <div className="col-6 d-flex justify-content-center" style={{flexDirection:'column', alignItems:'center'}}>
+              <div className="row d-flex justify-content-center text-center" style={{width:'80%'}}>
+                {robots.map((robot, index)=>{
+                return players.length>index ? (
+                  <div className="col-6" style={{marginBottom:'1%'}}> 
+                  <p className="robot-placeholder-name" style={{color:`${roboColor(players[index].name)}`}}>{players[index].username}</p>
+                  {
+                  creator && !start?
+                  <img onClick={()=>kickOut(room.users[index])} className="tile-bg" src={require(`../img/gui/robot-screen-${players[index].name}.png`)} alt="" /> :
+                  <img className="tile-bg" src={require(`../img/gui/robot-screen-${players[index].name}.png`)}alt="" />
+                }
               </div>
-              <div className="row no-gutters" style={{marginBottom: '4%'}}>
-                  <div className="col-3">
-                      <div style={{border: '2px solid #202020', minHeight:'120px', width:'385px', borderRadius: '10px', backgroundColor: '#343434'}}></div>
-                  </div>
-              </div>
-              <hr/>
-              <hr/>
+            ) : creator && !start?
+            (
+            <div className="col-6" style={{marginBottom:'1%'}}>  
+            <img onClick={()=>addBot(index)} className="tile-bg" src={require(`../img/gui/robot-screen-placeholder.png`)}alt="" /> </div>):(<div className="col-6" style={{marginBottom:'1%'}}>  
+            <img className="tile-bg" src={require(`../img/gui/robot-screen-placeholder.png`)}alt="" /> </div>)
+            })}
+            </div>
           </div>
-          {/* END LOW RES CHAT */}
-          {/*- START CHAT FOR MID SIZE RESOLUTIONS */}
-              <div className="container chat-mid-res-bg">
-                  <div id="draggableheader" className="row no-gutters" style={{marginBottom:'3%'}}></div>
-                  <div className="row">
-                      <div className="col-12"></div>
-                  </div>
+          <div className="col-6"style={{minHeight:'100%', maxHeight:'100%'}}>
+            <div className="row  d-flex justify-content-center text-center" style={{width:'95%', minHeight:'100%', maxHeight:'100%'}}>
+              <div className="col-12" style={{border: '2px solid #202020', padding:'3%', borderRadius: '10px', backgroundColor: '#343434', minHeight:'100%', maxHeight:'100%'}}>
+            <div className="chat-messages" style={{overflow:'auto', marginBottom:'2%', maxHeight:'10vh', minHeight:'75%'}}>
+              {room.messages.map((message, index)=>{
+              return (
+                <div key={index} className='message' style={{textAlign:'left'}}>
+                  <p className="meta" style={{marginBottom:'0px', fontSize:'2.1vw'}}><span className="a-login">{message.username}</span> <span style={{color:'#5a5a5a'}}>{message.time}</span></p>
+                  <p className="text" style={{marginBottom:'5px', fontSize:'2.1vw'}}>{message.text}</p>
+                </div>
+              )
+              })}
+            </div>
+            <div className="chat-form-container">
+              <form id="chat-form" onSubmit={(e)=>sendMessage(e)}>
+                <input id="msg" className="form-control" type="text" placeholder="Enter Message" style={{width:'100%', textAlign:'left', fontFamily:'Courier Prime', fontSize:'2.1vw'}} required autoComplete="off" />
+              </form>
+            </div>
               </div>
-          {/*- END CHAT FOR MID SIZE RESOLUTIONS */}
+            </div>
+          </div>
+        </div>
+          </div>
+          <div className="col-12">
+            <img className="tile-bg align-top" src={require("../img/robots-selected-small-footer.png")} alt="" />  
+          </div>
+        </div>
+          {/* END STATIC ROBOTS AND CHAT */}
+
+          {/* STATIC CHAT FOR MID RES */}
+          <div className="container-fluid chat-mid-res-bg no-gutters" style={{padding:'0'}}>
+          <div className="row no-gutters" style={{width:'100%'}}>
+          <div id="" className="col-12" style={{marginTop:'15px'}}>
+          <img className="tile-bg" src={require("../img/chat-mid-header.png")} alt="" />
+          </div>
+          <div className="col-12 chat-mid-body">
+          <div className="row">
+          <div className="col-12"style={{minHeight:'100%', maxHeight:'100%'}}>
+            <div className="row  d-flex justify-content-center text-center" style={{width:'95%', minHeight:'100%', maxHeight:'100%'}}>
+              <div className="col-12" style={{border: '2px solid #202020', padding:'3%', borderRadius: '10px', backgroundColor: '#343434', minHeight:'100%', maxHeight:'100%'}}>
+            <div className="chat-messages" style={{overflow:'auto', marginBottom:'2%', maxHeight:'10vh', minHeight:'75%'}}>
+              {room.messages.map((message, index)=>{
+              return (
+                <div key={index} className='message' style={{textAlign:'left'}}>
+                  <p className="meta" style={{marginBottom:'0px', fontSize:'2.1vw'}}><span className="a-login">{message.username}</span> <span style={{color:'#5a5a5a'}}>{message.time}</span></p>
+                  <p className="text" style={{marginBottom:'5px', fontSize:'2.1vw'}}>{message.text}</p>
+                </div>
+              )
+              })}
+            </div>
+            <div className="chat-form-container">
+              <form id="chat-form" onSubmit={(e)=>sendMessage(e)}>
+                <input id="msg" className="form-control" type="text" placeholder="Enter Message" style={{width:'100%', textAlign:'left', fontFamily:'Courier Prime', fontSize:'2.1vw'}} required autoComplete="off" />
+              </form>
+            </div>
+              </div>
+            </div>
+          </div>
+        </div>
+          </div>
+          <div className="col-12">
+            <img className="tile-bg align-top" src={require("../img/chat-mid-footer.png")} alt="" />  
+          </div>
+        </div>
+        </div>
+          {/*  END CHAT FOR MID RES */}
+
+
   </div>
 )}
 

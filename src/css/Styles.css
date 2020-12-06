@@ -163,6 +163,18 @@ h1 {
     padding-top:4%;
 }
 
+.selected-robot-body {
+    background: url(../img/robots-selected-small-body.png);
+    background-size: 100%;
+    background-repeat: repeat-y;
+}
+
+.chat-mid-body {
+    background: url(../img/chat-mid-body.png);
+    background-size: 100%;
+    background-repeat: repeat-y;
+}
+
 .deck-bg {
     min-height: 150px;
     padding: 0% 10% 0% 11%;
@@ -171,28 +183,14 @@ h1 {
     background-repeat: no-repeat;
 }
 
-.robot-placeholder {
-    min-height: 150px;
-    padding: 0% 10% 0% 11%;
-    background: url(../img/robots-placeholder.png);
-    background-size: 100%;
-    background-repeat: no-repeat;
-    max-width: 500px;
-    margin-bottom: 2%;
-}
-
-.robot-placeholder > .first-row {
-    padding-top: 7%;
-}
-
-.chat-mid-res-bg {
+/* .chat-mid-res-bg {
     margin-left:510px;
     width:360px;
     height:306px;
     background: url(../img/chat_mid-res_bg.png);
     background-size: cover;
     background-repeat: no-repeat;
-}
+} */
 
 .no-gutters {
     margin-right: 0;
@@ -270,6 +268,14 @@ p.robot-placeholder-name {
     margin-top: 25px;
     text-shadow: 1px 1px 0 #fff;
     font-size: 18px;
+}
+
+@media (max-width:901px){
+    p.robot-placeholder-name {
+        margin-left: 40%;
+        margin-top: 15%;
+        font-size: 2.1vw;
+    }
 }
 
 .newgame-btn {

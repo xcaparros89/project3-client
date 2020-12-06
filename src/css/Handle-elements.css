@@ -2,6 +2,7 @@
     .container.container-body{
         max-width:900px;
     }
+
     .chat-container  {
       display:none;
     }
@@ -10,6 +11,14 @@
     }
     .draggable-deck {
         display: none;
+    }
+
+}
+
+@media (min-width:900px) and (max-width:1199){
+
+    .chat-mid-res-bg {
+        display:block;
     }
 
 }
@@ -24,9 +33,11 @@
     .container.deck-container{
         left:-50%;
     }
+
     .chat-mid-res-bg {
         display:none;
     }
+
 }
 
 @media(min-width:1200px){
@@ -47,7 +58,7 @@
     }
 }
 
-@media(min-width:900px){
+@media(min-width:901px){
     .robot-placeholder {
         display:none
     }
