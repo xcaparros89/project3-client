@@ -7,7 +7,7 @@ import {orientationToString, findEmptyStartingPos} from '../utils/gameAct'
 import Draggable from 'react-draggable'; 
 import Map from './Map'
 
-//const socket = io(process.env.REACT_APP_API_URL, {
+
 const socket = io("https://robo-race-game.herokuapp.com", {
   transports: ["websocket", "polling"],
 });

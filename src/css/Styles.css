@@ -534,3 +534,7 @@ p.robot-placeholder-name {
     margin-right: 10%;
     margin-top:3%;
 }
+
+.error-message{
+    color:rgb(212, 128, 18);
+}

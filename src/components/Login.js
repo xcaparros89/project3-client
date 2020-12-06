@@ -5,7 +5,7 @@ import logo from "../img/logo.png"
 import { Link } from "react-router-dom";
 
 class Login extends Component {
-  state = { username: "", password: "" };
+  state = { username: "", password: "", isEmpty:false };
 
   componentDidMount() {
     document.body.classList.add('home');
@@ -14,8 +14,12 @@ class Login extends Component {
   handleFormSubmit = (event) => {
     event.preventDefault();
     const { username, password } = this.state;
-    this.props.login({ username, password });
-    console.log(this.props)
+    const newUsername = username.trim();
+    const newPassword = password.trim();
+    if(newUsername && newPassword){
+    this.setState({username:newUsername, password:newPassword, isEmpty:false})
+    this.props.login({ username:newUsername, password:newPassword });
+  } else {this.setState({isEmpty:true})}
   };
 
   handleChange = (event) => {
@@ -49,6 +53,8 @@ class Login extends Component {
                         <div className="form-group">
                             <input type="password" name="password" value={password} className="form-control" placeholder="Password" onChange={this.handleChange} />
                         </div>
+                        <p className='error-message'>{this.props.errorMessage}</p>
+                        {this.state.isEmpty && <p className='error-message'>Write a username and password!</p>}
                         <input type='submit' className="submitPlayBtn" value='' />
                         <p className="" style={{marginBottom:"0"}}>Don't you have an account?</p>
                         <p className="last-p"><Link to={"/guest"} className="a-login">Play as Guest</Link> or <Link to={"/signup"} className="a-login">Register</Link></p>

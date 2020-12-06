@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom';
 import logo from "../img/logo.png"
 
 class Guest extends Component {
-    state = { guest:""};
+    state = { guest:"", isEmpty:false};
 
     componentDidMount() {
         document.body.classList.add('home');
@@ -14,8 +14,13 @@ class Guest extends Component {
     handleFormSubmit = (event) => {
         event.preventDefault();
         const { guest } = this.state;
-        this.props.guest(guest);
-        console.log(this.props)
+        const newGuest = guest.trim();
+        if(newGuest){
+            this.setState({guest:newGuest, isEmpty:false})
+            this.props.guest(guest);
+        } else{
+            this.setState({isEmpty:true})
+        }
     };
 
     handleChange = (event) => {
@@ -45,6 +50,7 @@ class Guest extends Component {
                             <div className="form-group" >
                               <input type="text" name="guest" value={guest} className="form-control" placeholder="Type a Name" onChange={this.handleChange} />
                             </div>
+                            {this.state.isEmpty && <p className='error-message'>Write a username!</p>}
                             <input type='submit' className="submitPlayBtn" value='' />
                             <p className="" style={{marginBottom:"0"}}>Already have an account? </p>
                             <p className="last-p"><Link to={"/login"} className="a-login"> Login</Link> or <Link to={"/signup"} className="a-login"> Signup</Link> to create it.</p> 

@@ -10,7 +10,7 @@ const withAuth = (WrappedComponent) => {
       return (
         <Consumer>
           {/* El componente <Consumer> provee un callback que recibe el "value" con el objeto Providers */}
-          {({ login, signup, user, logout, isLoggedin, guest }) => {
+          {({ login, signup, user, logout, isLoggedin, guest, errorMessage }) => {
             return (
               <WrappedComponent
                 login={login}
@@ -19,6 +19,7 @@ const withAuth = (WrappedComponent) => {
                 logout={logout}
                 isLoggedin={isLoggedin}
                 guest={guest}
+                errorMessage={errorMessage}
                 {...this.props}
               />
             );
@@ -31,17 +32,17 @@ const withAuth = (WrappedComponent) => {
 
 // Provider
 class AuthProvider extends React.Component {
-  state = { isLoggedin: false, user: null, isLoading: true };
+  state = { isLoggedin: false, user: null, isLoading: true, errorMessage:false };
 
   componentDidMount() {
     // luego de que se monte el componente, llama a auth.me() que nos devuelve el usuario y setea los valores para loguearlo
     auth
       .me()
       .then((user) =>
-        this.setState({ isLoggedin: true, user: user, isLoading: false })
+        this.setState({ isLoggedin: true, user: user, isLoading: false, errorMessage:false })
       )
       .catch((err) =>
-        this.setState({ isLoggedin: false, user: null, isLoading: false })
+        this.setState({ isLoggedin: false, user: null, isLoading: false, errorMessage:false })
       );
   }
 
@@ -51,7 +52,7 @@ class AuthProvider extends React.Component {
 
     auth
       .signup({ username, password })
-      .then((user) => this.setState({ isLoggedin: true, user }))
+      .then((data) => {console.log(data, 'data'); data.errorMessage? this.setState({ errorMessage:data.errorMessage }) : this.setState({ isLoggedin: true, user:data.user })})
       .catch(({ response }) =>
         this.setState({ message: response.data.statusMessage })
       );
@@ -63,7 +64,7 @@ class AuthProvider extends React.Component {
 
     auth
       .login({ username, password })
-      .then((user) => {console.log(user, 'authProvider'); this.setState({ isLoggedin: true, user })})
+      .then((data) => {console.log(data, 'data'); data.errorMessage? this.setState({ errorMessage:data.errorMessage }) : this.setState({ isLoggedin: true, user:data.user })})
       .catch((err) => console.log(err));
   };
 
@@ -82,7 +83,7 @@ class AuthProvider extends React.Component {
 
   render() {
     // destructuramos isLoading, isLoggedin y user de this.state y login, logout y signup de this
-    const { isLoading, isLoggedin, user } = this.state;
+    const { isLoading, isLoggedin, user, errorMessage } = this.state;
     const { login, logout, signup, guest } = this;
 
     return isLoading ? (
@@ -90,7 +91,7 @@ class AuthProvider extends React.Component {
       // el objeto pasado en la prop value estará disponible para todos los componentes <Consumer>
       <div>Loading</div>
     ) : (
-      <Provider value={{ isLoggedin, user, login, logout, signup, guest }}>
+      <Provider value={{ isLoggedin, user, errorMessage, login, logout, signup, guest }}>
         {this.props.children}
       </Provider>
     ); /*<Provider> "value={}" datos que estarán disponibles para todos los componentes <Consumer> */

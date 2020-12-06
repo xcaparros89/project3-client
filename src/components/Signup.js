@@ -5,7 +5,7 @@ import logo from "../img/logo.png"
 import { Redirect } from 'react-router-dom';
 
 class Signup extends Component {
-  state = { username: "", password: "" };
+  state = { username: "", password: "", repeatPassword:'', isEmpty:false, isDifferent:false };
 
   componentDidMount() {
     document.body.classList.add('home');
@@ -13,9 +13,19 @@ class Signup extends Component {
 
   handleFormSubmit = (event) => {
     event.preventDefault();
-    const { username, password } = this.state;
+    const { username, password, repeatPassword } = this.state;
+    const newUsername = username.trim();
+    const newPassword = password.trim();
+    const newRepeatPassword = repeatPassword.trim();
+    if(!newUsername || !newPassword){
+      this.setState({isEmpty:true, isDifferent:false})
+    } else if(newRepeatPassword !== newPassword){
+      this.setState({isEmpty:false, isDifferent:true})
+    } else{
+    this.setState({username:newUsername, password:newPassword, isEmpty:false, isDifferent:false})
     //console.log('Signup -> form submit', { username, password });
-    this.props.signup({ username, password });
+    this.props.signup({username:newUsername, password:newPassword });
+    }
   };
 
   handleChange = (event) => {
@@ -24,10 +34,10 @@ class Signup extends Component {
   };
 
   render() {
-    const { username, password } = this.state;
+    const { username, password, repeatPassword } = this.state;
     return (
       <> {this.props.isLoggedin && <Redirect to='/allRooms' />}
-       {console.log(this.props.isLoggedin, 'isLoggedin')}
+       {console.log(this.props, 'signup props')}
     <div className="container login-container d-flex align-items-center">
         <div className="container home-bg">
             <div className="row no-gutters">
@@ -48,6 +58,12 @@ class Signup extends Component {
                             <div className="form-group">
                               <input type="password" name="password" value={password} onChange={this.handleChange} className="form-control"  placeholder="Password" />
                             </div>
+                            <div className="form-group">
+                              <input type="password" name="repeatPassword" value={repeatPassword} onChange={this.handleChange} className="form-control"  placeholder="Repeat password" />
+                            </div>
+                            <p className='error-message'>{this.props.errorMessage}</p>
+                            {this.state.isEmpty && <p className='error-message'>Write a username and password!</p>}
+                            {this.state.isDifferent && <p className='error-message'>The passwords do not match!</p>}
                             <input type='submit' className="submitSignupBtn" value='' />
                             <p className="" style={{marginBottom:"0"}}>Already have an account? <Link to={"/login"} className="a-login"> Login</Link></p> 
                         </form>
