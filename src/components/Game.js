@@ -433,17 +433,17 @@ const Game = (props) => {
           {/* END DRAGGABLE DECK */}
           {/* START STATIC DECK */}
           <div className="container deck-bg static-deck-container">
-              <div id="" className="row no-gutters" style={{marginBottom: '4%'}}>
-                      <div className="col-8 d-flex align-items-center"><img className="robot-controller-title" src={require("../img/gui/robot-controller/robot-controller-title.png")} alt="" /></div>
-                      <div className="col-2 d-flex align-items-center" style={{paddingLeft:'4%', paddingRight:'1%'}}>
+              <div id="" className="row no-gutters" style={{marginBottom: '4%', width:'100%'}}>
+                      <div className="col-8 d-flex align-items-center" style={{paddingTop:'13%'}}><img className="robot-controller-title" src={require("../img/gui/robot-controller/robot-controller-title.png")} alt="" /></div>
+                      <div className="col-2 d-flex align-items-center" style={{paddingLeft:'4%', paddingRight:'1%', paddingTop:'13%'}}>
                         {disabled.includes('endTurn')? <img  onClick={()=>endTurn()} className="clock" src={require("../img/gui/robot-controller/clock_disabled.png")} alt="" /> : <img  onClick={()=>endTurn()} className="clock" src={require("../img/gui/robot-controller/clock_active.png")} alt="" />}
                       </div>
-                      <div className="col-2">{counter>0?<img className="tile-bg" src={require("../img/gui/robot-controller/countdown_active_screen.png")} alt="" /> : <img className="tile-bg" src={require("../img/gui/robot-controller/countdown_disabled_screen.png")} alt="" />}<h1 className="countdown">{counter<1?'' : counter===10?counter:'0'+counter}</h1></div>
+                      <div className="col-2" style={{paddingTop:'13%'}}>{counter>0?<img className="tile-bg" src={require("../img/gui/robot-controller/countdown_active_screen.png")} alt="" /> : <img className="tile-bg" src={require("../img/gui/robot-controller/countdown_disabled_screen.png")} alt="" />}<h1 className="countdown">{counter<1?'' : counter===10?counter:'0'+counter}</h1></div>
                   </div>
               <div className="row no-gutters" style={{marginBottom: '4%'}}>
-                  <div className="col-4">
-                      <img className="tile-bg" src={require(`../img/gui/robot-controller/robot-placeholder.png`)} alt="Your Robot" />
-                  </div>
+              <div className="col-4">
+                          <img className="tile-bg" src={require(`../img/gui/robot-controller/robot-placeholder-${robotChosen}.png`)} alt="" />
+                      </div>
                   <div className="col-8">
                           <div className="row cards-to-play no-gutters">
                               <div className="col"><img className="tile-bg d-block mx-auto" src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[0])}_screen.png`)} alt="" /></div>
@@ -463,7 +463,7 @@ const Game = (props) => {
                       )
                     })}
                   </div>
-                  <hr/>
+                  <hr className="fillController"/>
           </div>
           {/* END STATIC DECK */}
           
@@ -529,27 +529,27 @@ const Game = (props) => {
           {/* STATIC CHAT FOR MID RES */}
           <div className="container-fluid chat-mid-res-bg no-gutters" style={{padding:'0'}}>
           <div className="row no-gutters" style={{width:'100%'}}>
-          <div id="" className="col-12" style={{marginTop:'15px'}}>
+          <div id="" className="col-12" style={{marginTop:''}}>
           <img className="tile-bg" src={require("../img/chat-mid-header.png")} alt="" />
           </div>
           <div className="col-12 chat-mid-body">
-          <div className="row">
-          <div className="col-12"style={{minHeight:'100%', maxHeight:'100%'}}>
-            <div className="row  d-flex justify-content-center text-center" style={{width:'95%', minHeight:'100%', maxHeight:'100%'}}>
+          <div className="row no-gutters">
+          <div className="col-12  d-flex justify-content-center text-center">
+            <div className="row no-gutters" style={{width:'90%'}}>
               <div className="col-12" style={{border: '2px solid #202020', padding:'3%', borderRadius: '10px', backgroundColor: '#343434', minHeight:'100%', maxHeight:'100%'}}>
-            <div className="chat-messages" style={{overflow:'auto', marginBottom:'2%', maxHeight:'10vh', minHeight:'75%'}}>
+            <div className="chat-messages" style={{overflow:'auto', marginBottom:'2%', maxHeight:'15vh', minHeight:'15vh'}}>
               {room.messages.map((message, index)=>{
               return (
                 <div key={index} className='message' style={{textAlign:'left'}}>
-                  <p className="meta" style={{marginBottom:'0px', fontSize:'2.1vw'}}><span className="a-login">{message.username}</span> <span style={{color:'#5a5a5a'}}>{message.time}</span></p>
-                  <p className="text" style={{marginBottom:'5px', fontSize:'2.1vw'}}>{message.text}</p>
+                  <p className="meta" style={{marginBottom:'0px', fontSize:'16px'}}><span className="a-login">{message.username}</span> <span style={{color:'#5a5a5a'}}>{message.time}</span></p>
+                  <p className="text" style={{marginBottom:'5px', fontSize:'16px'}}>{message.text}</p>
                 </div>
               )
               })}
             </div>
             <div className="chat-form-container">
               <form id="chat-form" onSubmit={(e)=>sendMessage(e)}>
-                <input id="msg" className="form-control" type="text" placeholder="Enter Message" style={{width:'100%', textAlign:'left', fontFamily:'Courier Prime', fontSize:'2.1vw'}} required autoComplete="off" />
+                <input id="msg" className="form-control" type="text" placeholder="Enter Message" style={{width:'100%', textAlign:'left', fontFamily:'Courier Prime', fontSize:'16px'}} required autoComplete="off" />
               </form>
             </div>
               </div>

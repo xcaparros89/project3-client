@@ -102,6 +102,34 @@ h1.countdown.red {
     color:#f00;  
 }
 
+@media (min-width:471px) and (max-width:1199px) {
+
+
+    h1.countdown {
+        font-size: 1.6rem;
+        margin-top:65%;
+    }
+
+}
+
+@media (min-width:371px) and (max-width:470px) {
+
+    h1.countdown {
+        font-size: 1.4rem;
+        margin-top:65%;
+    }
+
+}
+
+@media (max-width:370px) {
+
+    h1.countdown {
+        font-size: 1.2rem;
+        margin-top:65%;
+    }
+
+}
+
 h1 {
     margin-bottom: 0;
     font-weight: 500;
@@ -181,6 +209,42 @@ h1 {
     background: url(../img/gui/robot-controller/robot-controller.png);
     background-size: 100%;
     background-repeat: no-repeat;
+}
+
+
+@media (min-width:901px) and (max-width:1199px){
+    .deck-bg {
+
+        min-height: 311px;
+        padding: 0% 6% 0% 6%;
+
+    } 
+}
+
+@media (min-width:701px) and (max-width:900px){
+    .deck-bg {
+        padding: 0% 8% 0% 8%;
+        min-height: 311px;
+    } 
+}
+
+
+@media (min-width:526px) and (max-width:700px){
+    .deck-bg {
+        padding: 0% 10% 0% 10%;
+        min-height: 311px;
+    } 
+}
+
+.fillController {
+    display:none;
+}
+
+@media (max-width:525px){
+    .fillController {
+        display:block;
+        min-height: 5vw;
+    }
 }
 
 /* .chat-mid-res-bg {
@@ -493,6 +557,12 @@ p.robot-placeholder-name {
     height:100vh;
     width: 200px;
     margin-top:16px;
+}
+
+@media(max-width:1199px) {
+    .robots-container {
+        height:760px!important;
+    }
 }
 
 .chat {
