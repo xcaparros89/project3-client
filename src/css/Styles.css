@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
 @font-face {
     font-family: 'Transformers Movie';
     src: url('../fonts/TransformersMovie.eot');
@@ -8,7 +9,7 @@
     font-style: normal;
     font-display: swap;
 }
-@import url('https://fonts.googleapis.com/css2?family=Courier+Prime&display=swap');
+
 body {
     background-color: #626e7c;
     background: url(../img/main-bg.png);
@@ -20,23 +21,10 @@ body {
 
 @media (max-width:1380px){
     body{
-        /* margin-top:45px; */
         background: url(../img/bg-pattern.png);
         background-repeat: repeat;
     }
 
-}
-
-@media (max-width:900px){
-    body{
-        /* margin-top:30px; */
-    }
-}
-
-@media (max-width:576px){
-    body{
-        /* margin-top:10px; */
-    }
 }
 
 @media (max-width:420px){
@@ -114,6 +102,34 @@ h1.countdown.red {
     color:#f00;  
 }
 
+@media (min-width:471px) and (max-width:1199px) {
+
+
+    h1.countdown {
+        font-size: 1.6rem;
+        margin-top:65%;
+    }
+
+}
+
+@media (min-width:371px) and (max-width:470px) {
+
+    h1.countdown {
+        font-size: 1.4rem;
+        margin-top:65%;
+    }
+
+}
+
+@media (max-width:370px) {
+
+    h1.countdown {
+        font-size: 1.2rem;
+        margin-top:65%;
+    }
+
+}
+
 h1 {
     margin-bottom: 0;
     font-weight: 500;
@@ -175,6 +191,18 @@ h1 {
     padding-top:4%;
 }
 
+.selected-robot-body {
+    background: url(../img/robots-selected-small-body.png);
+    background-size: 100%;
+    background-repeat: repeat-y;
+}
+
+.chat-mid-body {
+    background: url(../img/chat-mid-body.png);
+    background-size: 100%;
+    background-repeat: repeat-y;
+}
+
 .deck-bg {
     min-height: 150px;
     padding: 0% 10% 0% 11%;
@@ -183,26 +211,50 @@ h1 {
     background-repeat: no-repeat;
 }
 
-.robot-placeholder {
-    min-height: 150px;
-    padding: 0% 10% 0% 11%;
-    background: url(../img/robots-placeholder.png);
-    background-size: 100%;
-    background-repeat: no-repeat;
+
+@media (min-width:901px) and (max-width:1199px){
+    .deck-bg {
+
+        min-height: 311px;
+        padding: 0% 6% 0% 6%;
+
+    } 
 }
 
-.robot-placeholder > .first-row {
-    padding-top: 7%;
+@media (min-width:701px) and (max-width:900px){
+    .deck-bg {
+        padding: 0% 8% 0% 8%;
+        min-height: 311px;
+    } 
 }
 
-.chat-mid-res-bg {
+
+@media (min-width:526px) and (max-width:700px){
+    .deck-bg {
+        padding: 0% 10% 0% 10%;
+        min-height: 311px;
+    } 
+}
+
+.fillController {
+    display:none;
+}
+
+@media (max-width:525px){
+    .fillController {
+        display:block;
+        min-height: 5vw;
+    }
+}
+
+/* .chat-mid-res-bg {
     margin-left:510px;
     width:360px;
     height:306px;
     background: url(../img/chat_mid-res_bg.png);
     background-size: cover;
     background-repeat: no-repeat;
-}
+} */
 
 .no-gutters {
     margin-right: 0;
@@ -280,6 +332,14 @@ p.robot-placeholder-name {
     margin-top: 25px;
     text-shadow: 1px 1px 0 #fff;
     font-size: 18px;
+}
+
+@media (max-width:901px){
+    p.robot-placeholder-name {
+        margin-left: 40%;
+        margin-top: 15%;
+        font-size: 2.1vw;
+    }
 }
 
 .newgame-btn {
@@ -499,6 +559,12 @@ p.robot-placeholder-name {
     margin-top:16px;
 }
 
+@media(max-width:1199px) {
+    .robots-container {
+        height:760px!important;
+    }
+}
+
 .chat {
     margin-top: 85px;
     margin-left:15px;
@@ -537,4 +603,9 @@ p.robot-placeholder-name {
 
 .error-message{
     color:rgb(212, 128, 18);
+}
+@media (min-width:1381px){
+    .custom-navbar {
+        margin-top:50px;
+    }
 }

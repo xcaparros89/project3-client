@@ -299,7 +299,7 @@ const Game = (props) => {
   return (
   <div className="container container-body">
 
-<div className="container-fluid d-flex justify-content-center" style={{marginTop:'50px'}}>
+<div className="container-fluid d-flex justify-content-center custom-navbar">
           <div className="row navbar-row-ingame d-flex justify-content-center end">
               <Link to={"/"} id='home-btn'>
                 <button className='homeBtn'></button>
@@ -430,21 +430,20 @@ const Game = (props) => {
               </div>
           </div>
         </Draggable>
-
           {/* END DRAGGABLE DECK */}
           {/* START STATIC DECK */}
           <div className="container deck-bg static-deck-container">
-              <div id="" className="row no-gutters" style={{marginBottom: '4%'}}>
-                      <div className="col-8 d-flex align-items-center"><img className="robot-controller-title" src={require("../img/gui/robot-controller/robot-controller-title.png")} alt="" /></div>
-                      <div className="col-2 d-flex align-items-center" style={{paddingLeft:'4%', paddingRight:'1%'}}>
+              <div id="" className="row no-gutters" style={{marginBottom: '4%', width:'100%'}}>
+                      <div className="col-8 d-flex align-items-center" style={{paddingTop:'13%'}}><img className="robot-controller-title" src={require("../img/gui/robot-controller/robot-controller-title.png")} alt="" /></div>
+                      <div className="col-2 d-flex align-items-center" style={{paddingLeft:'4%', paddingRight:'1%', paddingTop:'13%'}}>
                         {disabled.includes('endTurn')? <img  onClick={()=>endTurn()} className="clock" src={require("../img/gui/robot-controller/clock_disabled.png")} alt="" /> : <img  onClick={()=>endTurn()} className="clock" src={require("../img/gui/robot-controller/clock_active.png")} alt="" />}
                       </div>
-                      <div className="col-2">{counter>0?<img className="tile-bg" src={require("../img/gui/robot-controller/countdown_active_screen.png")} alt="" /> : <img className="tile-bg" src={require("../img/gui/robot-controller/countdown_disabled_screen.png")} alt="" />}<h1 className="countdown">{counter<1?'' : counter===10?counter:'0'+counter}</h1></div>
+                      <div className="col-2" style={{paddingTop:'13%'}}>{counter>0?<img className="tile-bg" src={require("../img/gui/robot-controller/countdown_active_screen.png")} alt="" /> : <img className="tile-bg" src={require("../img/gui/robot-controller/countdown_disabled_screen.png")} alt="" />}<h1 className="countdown">{counter<1?'' : counter===10?counter:'0'+counter}</h1></div>
                   </div>
               <div className="row no-gutters" style={{marginBottom: '4%'}}>
-                  <div className="col-4">
-                      <img className="tile-bg" src={require(`../img/gui/robot-controller/robot-placeholder.png`)} alt="Your Robot" />
-                  </div>
+              <div className="col-4">
+                          <img className="tile-bg" src={require(`../img/gui/robot-controller/robot-placeholder-${robotChosen}.png`)} alt="" />
+                      </div>
                   <div className="col-8">
                           <div className="row cards-to-play no-gutters">
                               <div className="col"><img className="tile-bg d-block mx-auto" src={require(`../img/gui/robot-controller/${buttonName(yourActions.actions[0])}_screen.png`)} alt="" /></div>
@@ -464,68 +463,108 @@ const Game = (props) => {
                       )
                     })}
                   </div>
-                  <hr/>
+                  <hr className="fillController"/>
           </div>
           {/* END STATIC DECK */}
-          {/* START STATIC ROBOTS */}
-          <div className="container robot-placeholder static-deck-container">
-              <div id="" className="row no-gutters first-row" style={{marginBottom: '6%'}}>
-              </div>
-              <div className="row no-gutters" style={{marginBottom:'4%'}}>
-                  <div className="col-3">
-                      <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
-                  </div>
-                  <div className="col-3">
-                      <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
-                  </div>
-                  <div className="col-3">
-                      <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
-                  </div>
-                  <div className="col-3">
-                      <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
-                  </div>
-              </div>
-              <div className="row no-gutters" style={{marginBottom: '4%'}}>
-                  <div className="col-3">
-                      <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
-                  </div>
-                  <div className="col-3">
-                      <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
-                  </div>
-                  <div className="col-3">
-                      <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
-                  </div>
-                  <div className="col-3">
-                      <img className="tile-bg" src={require("../img/gui/robot-controller/robot-placeholder.png")}alt="" />
-                  </div>
-              </div>
-              <hr/>
-          </div>
-          {/* STRAT STATIC DECK */}
-          {/* START LOW RES CHAT */}
-          <div className="container robot-placeholder static-deck-container">
-              <div id="" className="row no-gutters first-row" style={{marginBottom: '6%'}}>
-              </div>
-              <div className="row no-gutters" style={{marginBottom: '4%'}}>
-                  <div className="col-3">
-                      <div style={{border: '2px solid #202020', minHeight:'120px', width:'385px', borderRadius: '10px', backgroundColor: '#343434'}}></div>
-                  </div>
-              </div>
-              <hr/>
-              <hr/>
-          </div>
-          {/* END LOW RES CHAT */}
-          {/*- START CHAT FOR MID SIZE RESOLUTIONS */}
-              <div className="container chat-mid-res-bg">
-                  <div id="draggableheader" className="row no-gutters" style={{marginBottom:'3%'}}></div>
-                  <div className="row">
-                      <div className="col-12"></div>
-                  </div>
-              </div>
-          {/*- END CHAT FOR MID SIZE RESOLUTIONS */}
+          
       </>
       // END BOARD
   )}
+  {/* START STATIC ROBOTS AND CHAT*/}
+        <div className="row no-gutters robot-placeholder">
+          <div id="" className="col-12" style={{marginTop:'15px'}}>
+          <img className="tile-bg" src={require("../img/robots-selected-small-header.png")} alt="" />
+          </div>
+          <div className="col-12 selected-robot-body">
+          <div className="row">
+            <div className="col-6 d-flex justify-content-center" style={{flexDirection:'column', alignItems:'center'}}>
+              <div className="row d-flex justify-content-center text-center" style={{width:'80%'}}>
+                {robots.map((robot, index)=>{
+                return players.length>index ? (
+                  <div className="col-6" style={{marginBottom:'1%'}}> 
+                  <p className="robot-placeholder-name" style={{color:`${roboColor(players[index].name)}`}}>{players[index].username}</p>
+                  {
+                  creator && !start?
+                  <img onClick={()=>kickOut(room.users[index])} className="tile-bg" src={require(`../img/gui/robot-screen-${players[index].name}.png`)} alt="" /> :
+                  <img className="tile-bg" src={require(`../img/gui/robot-screen-${players[index].name}.png`)}alt="" />
+                }
+              </div>
+            ) : creator && !start?
+            (
+            <div className="col-6" style={{marginBottom:'1%'}}>  
+            <img onClick={()=>addBot(index)} className="tile-bg" src={require(`../img/gui/robot-screen-placeholder.png`)}alt="" /> </div>):(<div className="col-6" style={{marginBottom:'1%'}}>  
+            <img className="tile-bg" src={require(`../img/gui/robot-screen-placeholder.png`)}alt="" /> </div>)
+            })}
+            </div>
+          </div>
+          <div className="col-6"style={{minHeight:'100%', maxHeight:'100%'}}>
+            <div className="row  d-flex justify-content-center text-center" style={{width:'95%', minHeight:'100%', maxHeight:'100%'}}>
+              <div className="col-12" style={{border: '2px solid #202020', padding:'3%', borderRadius: '10px', backgroundColor: '#343434', minHeight:'100%', maxHeight:'100%'}}>
+            <div className="chat-messages" style={{overflow:'auto', marginBottom:'2%', maxHeight:'10vh', minHeight:'75%'}}>
+              {room.messages.map((message, index)=>{
+              return (
+                <div key={index} className='message' style={{textAlign:'left'}}>
+                  <p className="meta" style={{marginBottom:'0px', fontSize:'2.1vw'}}><span className="a-login">{message.username}</span> <span style={{color:'#5a5a5a'}}>{message.time}</span></p>
+                  <p className="text" style={{marginBottom:'5px', fontSize:'2.1vw'}}>{message.text}</p>
+                </div>
+              )
+              })}
+            </div>
+            <div className="chat-form-container">
+              <form id="chat-form" onSubmit={(e)=>sendMessage(e)}>
+                <input id="msg" className="form-control" type="text" placeholder="Enter Message" style={{width:'100%', textAlign:'left', fontFamily:'Courier Prime', fontSize:'2.1vw'}} required autoComplete="off" />
+              </form>
+            </div>
+              </div>
+            </div>
+          </div>
+        </div>
+          </div>
+          <div className="col-12">
+            <img className="tile-bg align-top" src={require("../img/robots-selected-small-footer.png")} alt="" />  
+          </div>
+        </div>
+          {/* END STATIC ROBOTS AND CHAT */}
+
+          {/* STATIC CHAT FOR MID RES */}
+          <div className="container-fluid chat-mid-res-bg no-gutters" style={{padding:'0'}}>
+          <div className="row no-gutters" style={{width:'100%'}}>
+          <div id="" className="col-12" style={{marginTop:''}}>
+          <img className="tile-bg" src={require("../img/chat-mid-header.png")} alt="" />
+          </div>
+          <div className="col-12 chat-mid-body">
+          <div className="row no-gutters">
+          <div className="col-12  d-flex justify-content-center text-center">
+            <div className="row no-gutters" style={{width:'90%'}}>
+              <div className="col-12" style={{border: '2px solid #202020', padding:'3%', borderRadius: '10px', backgroundColor: '#343434', minHeight:'100%', maxHeight:'100%'}}>
+            <div className="chat-messages" style={{overflow:'auto', marginBottom:'2%', maxHeight:'15vh', minHeight:'15vh'}}>
+              {room.messages.map((message, index)=>{
+              return (
+                <div key={index} className='message' style={{textAlign:'left'}}>
+                  <p className="meta" style={{marginBottom:'0px', fontSize:'16px'}}><span className="a-login">{message.username}</span> <span style={{color:'#5a5a5a'}}>{message.time}</span></p>
+                  <p className="text" style={{marginBottom:'5px', fontSize:'16px'}}>{message.text}</p>
+                </div>
+              )
+              })}
+            </div>
+            <div className="chat-form-container">
+              <form id="chat-form" onSubmit={(e)=>sendMessage(e)}>
+                <input id="msg" className="form-control" type="text" placeholder="Enter Message" style={{width:'100%', textAlign:'left', fontFamily:'Courier Prime', fontSize:'16px'}} required autoComplete="off" />
+              </form>
+            </div>
+              </div>
+            </div>
+          </div>
+        </div>
+          </div>
+          <div className="col-12">
+            <img className="tile-bg align-top" src={require("../img/chat-mid-footer.png")} alt="" />  
+          </div>
+        </div>
+        </div>
+          {/*  END CHAT FOR MID RES */}
+
+
   </div>
 )}
 
