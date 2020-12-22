@@ -12,7 +12,7 @@ React (hooks, context), MongoDB, Socket.io, Bootstrap, CSS, responsive design
 https://robo-race-game.herokuapp.com/
 
 <br>
- <p><img width='40%' src='/src/img/readme/roborace-img-1.png' alt='wireframe'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img width='40%' src='/src/img/readme/roborace-img-3.png' alt='wireframe'></p>
+ <p><img width='40%' src='https://media.giphy.com/media/v95YVRxjS9lnPdDJTe/giphy.gif' alt='wireframe'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img width='40%' src='/src/img/readme/roborace-img-3.png' alt='wireframe'></p>
  <br>
  <img width='40%' src='/src/img/readme/roborace-img-2.png' alt='wireframe'>
   <br>
