@@ -1,5 +1,8 @@
 # Robo-race
 
+<br>
+<img src='https://media.giphy.com/media/v95YVRxjS9lnPdDJTe/giphy.gif' alt='wireframe'>
+<br>
 
 ## Description
 Roborace is a multiplayer game based in the boardgame RoboRally.
@@ -10,10 +13,6 @@ React (hooks, context), MongoDB, Socket.io, Bootstrap, CSS, responsive design
 
 ## Link deploy
 https://robo-race-game.herokuapp.com/
-
-<br>
-<img src='https://media.giphy.com/media/v95YVRxjS9lnPdDJTe/giphy.gif' alt='wireframe'>
-<br>
 
 ## To try it
 In the client, write in the console:
