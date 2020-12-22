@@ -1,6 +1,6 @@
 # Robo-race
 <br>
- <img style={{max-width:'50%'}} src='/src/img/readme/roborace-img-1.png' alt='wireframe'>
+ <img width:'50%' src='/src/img/readme/roborace-img-1.png' alt='wireframe'>
 <br>
  <img src='/src/img/readme/roborace-img-2.png' alt='wireframe'>
  <br>
