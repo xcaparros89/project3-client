@@ -1,8 +1,9 @@
 # Robo-race
 <br>
- <p><img width='40%' src='/src/img/readme/roborace-img-1.png' alt='wireframe'>&nbsp;&nbsp;&nbsp;<img width='40%' src='/src/img/readme/roborace-img-2.png' alt='wireframe'></p>
+ <p><img width='40%' src='/src/img/readme/roborace-img-1.png' alt='wireframe'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img width='40%' src='/src/img/readme/roborace-img-3.png' alt='wireframe'></p>
  <br>
-  <img width='40%' src='/src/img/readme/roborace-img-3.png' alt='wireframe'>
+ <img width='40%' src='/src/img/readme/roborace-img-2.png' alt='wireframe'>
+
   <br>
 
 ## Description
